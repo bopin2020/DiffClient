@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>resources\diffclient.ico</ApplicationIcon>
     <UseWindowsForms>False</UseWindowsForms>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
