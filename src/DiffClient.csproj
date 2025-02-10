@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>resources\diffclient.ico</ApplicationIcon>
+    <UseWindowsForms>False</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="thrid\**" />
+    <EmbeddedResource Remove="thrid\**" />
+    <None Remove="thrid\**" />
+    <Page Remove="thrid\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\admin\.nuget\packages\diffplex.wpf\1.4.0\contentFiles\any\net6.0-windows7.0\DiffPlex.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="resources\close.png" />
+    <None Remove="resources\history.txt" />
+    <None Remove="resources\indexpagetitle.png" />
+    <None Remove="resources\riven.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="resources\diffclient.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="resources\close.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\history.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\indexpagetitle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="resources\riven.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DiffPlex.Wpf" Version="1.4.0" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="DiffEngine">
+      <HintPath>thrid\DiffEngine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

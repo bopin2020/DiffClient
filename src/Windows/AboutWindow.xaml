@@ -1,0 +1,26 @@
+﻿<Window x:Class="DiffClient.Windows.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiffClient.Windows"
+        mc:Ignorable="d"
+        Title="About DiffClient"
+        WindowStartupLocation="CenterScreen"
+        Height="100" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="aboutWindowDescription" Text="{Binding DiffClientDescription}" Grid.Row="0"/>
+        <DockPanel Grid.Row="1">
+            <TextBlock DockPanel.Dock="Left">
+                <Hyperlink NavigateUri="{Binding DiffClientLinks}" RequestNavigate="Hyperlink_RequestNavigate">
+                    <TextBlock Text="{Binding DiffClientLinks}"/>
+                </Hyperlink>
+            </TextBlock>
+            <Button DockPanel.Dock="Right" MaxWidth="30" Content="OK" Margin="5" Click="Button_Click"/>
+        </DockPanel>
+    </Grid>
+</Window>

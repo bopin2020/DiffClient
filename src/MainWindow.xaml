@@ -1,0 +1,24 @@
+﻿<Window x:Class="DiffClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiffClient"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Height="900" Width="1200">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Menu x:Name="menu0" Grid.Row="0" Initialized="menu0_Initialized">
+        </Menu>
+
+        <TabControl x:Name="rootTab" Grid.Row="1" SelectionChanged="rootTab_SelectChanged" KeyDown="rootTab_KeyDown" TabStripPlacement="Top" Initialized="rootTab_Initialized">
+        </TabControl>
+
+        <Label x:Name="g_status" Grid.Row="2" Content="error code: 0"  Initialized="g_status_Initialized" Foreground="Black" ToolTip="{Binding StatusToolTip,Mode =TwoWay,UpdateSourceTrigger =PropertyChanged}" FontFamily="Comic Sans MS"/>
+    </Grid>
+</Window>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DiffClient": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:\\Desktop\\diffdecompile\\fltMgr-10.0.22621.1409.sys_vs_fltMgr-10.0.22621.4655.sys.diffdecompile\""
+    }
+  }
+}

@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="DiffClient.UserControls.PerformanceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DiffClient.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid  Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" MinWidth="100"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="4*" MinWidth="400"/>
+        </Grid.ColumnDefinitions>
+        <TreeView Grid.Column="0" x:Name="settingTree" SelectedItemChanged="settingTree_SelectedItemChanged"  MouseDoubleClick="settingTree_MouseDoubleClick"  Initialized="settingTree_Initialized">
+        </TreeView>
+        <GridSplitter x:Name="settingsplitter" Grid.Column="1" HorizontalAlignment="Stretch" Initialized="settingsplitter_Initialized">
+
+        </GridSplitter>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Frame Grid.Row="0" x:Name="settingFrame"/>
+            <DockPanel Grid.Row="1" LastChildFill="False">
+                <Button Margin="5" DockPanel.Dock="Left"  Content="保存" Click="Store_Click"/>
+                <Button Margin="5" DockPanel.Dock="Right" Content="取消" Click="Cancel_Click"/>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</UserControl>
