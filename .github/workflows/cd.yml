@@ -1,0 +1,55 @@
+name: Build and tag archive
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  build:
+    strategy:
+      matrix:
+        configuration: [Release]
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+      with:
+        fetch-depth: 0
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Install NuGet Packages
+      run: nuget restore src\DiffClient.sln
+      
+    - name: Build solution
+      run: msbuild -nologo -v:m -p:Configuration=${{ matrix.configuration }} src\DiffClient.sln
+
+    # Archive the package
+    - name: Create archive
+      run: Compress-Archive -Path src\bin\x64\Release\net6.0-windows -DestinationPath src\bin\x64\Release\DiffClient.zip
+
+    # Create the release:  https://github.com/actions/create-release
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: ${{ github.ref_name }}
+        body: ${{ steps.changelog.outputs.changelog }}
+        draft: false
+        prerelease: false
+        
+    - name: Upload Release Exe2
+      id: upload-release-exe2
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: src\bin\x64\Release\DiffClient.zip
+        asset_name: DiffClient.zip
+        asset_content_type: application/octet-stream

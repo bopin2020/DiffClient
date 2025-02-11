@@ -1,4 +1,4 @@
-name: Build and tag archive
+name: push code and pull request
 on:
   push:
     branches: [ main ]
