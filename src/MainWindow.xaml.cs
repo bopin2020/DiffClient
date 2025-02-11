@@ -69,6 +69,7 @@ namespace DiffClient
         {
             ExitCommand ec = g_ExitCommand as ExitCommand;
             ec.ExitFromClick(false);
+            e.Cancel = true;
         }
 
         private void menu0_Initialized(object sender, EventArgs e)

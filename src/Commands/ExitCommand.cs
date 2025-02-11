@@ -1,4 +1,5 @@
 ﻿using DiffClient.UserControls;
+using DiffClient.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,11 +17,13 @@ using System.Windows.Media;
 
 namespace DiffClient.Commands
 {
-    internal class ExitCommand : ICommand
+    public class ExitCommand : ICommand
     {
         public event EventHandler? CanExecuteChanged;
 
         private MainWindow _mainWindow;
+
+        public bool Cancel { get; set; }
 
         public ExitCommand(MainWindow mainWindow)
         {
@@ -34,18 +37,24 @@ namespace DiffClient.Commands
 
         public void Execute(object? parameter)
         {
-            ExitFromClick(false);
-            Environment.Exit(0);
+            if(!ExitFromClick(false))
+                Environment.Exit(0);
         }
 
-        public void ExitFromClick(bool click)
+        public bool ExitFromClick(bool click)
         {
             MainWindow.SetStatusException($"{nameof(ExitCommand)} invoked", LogStatusLevel.Warning);
-            if (MessageBox.Show("是否保存设置", "setting", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-            {
-                _mainWindow.mainWindowViewModel.SaveSetting();
-                _mainWindow.mainWindowViewModel.GlobalLogStream?.Close();
-            }
+            var window = new ExitDialogWindow(this);
+            var viewmodel = new ExitDialogWindowViewModel(window);
+            window.DataContext = viewmodel;
+            window.ShowDialog();
+            return Cancel;
+
+            //if (MessageBox.Show("是否保存设置", "setting", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            //{
+            //    _mainWindow.mainWindowViewModel.SaveSetting();
+            //    _mainWindow.mainWindowViewModel.GlobalLogStream?.Close();
+            //}
         }
     }
 }

@@ -19,6 +19,27 @@
         <TabControl x:Name="rootTab" Grid.Row="1" SelectionChanged="rootTab_SelectChanged" KeyDown="rootTab_KeyDown" TabStripPlacement="Top" Initialized="rootTab_Initialized">
         </TabControl>
 
-        <Label x:Name="g_status" Grid.Row="2" Content="error code: 0"  Initialized="g_status_Initialized" Foreground="Black" ToolTip="{Binding StatusToolTip,Mode =TwoWay,UpdateSourceTrigger =PropertyChanged}" FontFamily="Comic Sans MS"/>
+        <StatusBar x:Name="root_statusbar" Grid.Row="2" VerticalAlignment="Bottom" Background="Beige">
+            <StatusBarItem>
+                <Label x:Name="g_status" Content="error code: 0"  Initialized="g_status_Initialized" Foreground="Black" ToolTip="{Binding StatusToolTip,Mode =TwoWay,UpdateSourceTrigger =PropertyChanged}" FontFamily="Comic Sans MS"/>
+            </StatusBarItem>
+            <StatusBarItem>
+                <ProgressBar Width="100" Height="20"
+          Name="progressBar1">
+                    <ProgressBar.Triggers>
+                        <EventTrigger RoutedEvent="ProgressBar.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+         Storyboard.TargetName="progressBar1" 
+         Storyboard.TargetProperty="Value"
+         From="0" To="100" Duration="0:0:5"  />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ProgressBar.Triggers>
+                </ProgressBar>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
