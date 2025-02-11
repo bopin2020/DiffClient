@@ -68,8 +68,10 @@ namespace DiffClient
         private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             ExitCommand ec = g_ExitCommand as ExitCommand;
-            ec.ExitFromClick(false);
-            e.Cancel = true;
+            if (ec.ExitFromClick(false))
+            {
+                e.Cancel = true;
+            }
         }
 
         private void menu0_Initialized(object sender, EventArgs e)
