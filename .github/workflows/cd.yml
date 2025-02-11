@@ -28,7 +28,7 @@ jobs:
 
     # Archive the package
     - name: Create archive
-      run: Compress-Archive -Path src\bin\x64\Release\net6.0-windows -DestinationPath src\bin\x64\Release\DiffClient.zip
+      run: Compress-Archive -Path .\src\bin\x64\Release\net6.0-windows\* -DestinationPath .\src\bin\x64\Release\DiffClient.zip
 
     # Create the release:  https://github.com/actions/create-release
     - name: Create release
@@ -50,6 +50,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: src\bin\x64\Release\DiffClient.zip
+        asset_path: .\src\bin\x64\Release\DiffClient.zip
         asset_name: DiffClient.zip
-        asset_content_type: application/octet-stream
+        asset_content_type: application/zip
