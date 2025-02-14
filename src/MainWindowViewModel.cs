@@ -2,6 +2,7 @@
 using DiffClient.DataModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Automation;
 
 #pragma warning disable
@@ -22,7 +24,7 @@ namespace DiffClient
         public MainWindowViewModel(MainWindow mainWindow)
         {
             _mainwindows = mainWindow;
-            mainWindow.DataContext = this;
+            SettingManager = new SettingManager(this);
             LoadSetting();
         }
         private string statusTip;
@@ -57,35 +59,19 @@ namespace DiffClient
         public FileStream GlobalLogStream { get; set; }
         public DiffSetting Setting { get; set; }
 
+        public ObservableCollection<DiffTreeItem> TreeItemCaches { get; set; } = new ObservableCollection<DiffTreeItem>();
+
+        public SettingManager SettingManager { get; private set; }
+
+
         private void LoadSetting()
         {
-            if (!File.Exists("resources/setting.profile"))
-            {
-                Setting = new DiffSetting()
-                {
-                    RemoteUrls = new string[] { "" },
-                    CacheDirectory = "_cache",
-                    LogFile = Path.Combine(Path.GetTempPath(),Guid.NewGuid().ToString().Replace("-","").Substring(8)),
-                    IsPreviewDiffDecompile = true,
-                    HistoryNumber = 10,
-                    HistoryDisableFile = true,
-                };
-                SaveSetting();
-            }
-            else
-            {
-                Setting = JsonSerializer.Deserialize<DiffSetting>(File.ReadAllBytes("resources/setting.profile"));
-                if(Setting.LogFile != null)
-                {
-                    GlobalLogStream = new FileStream(Setting.LogFile, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                }
-            }
+            SettingManager.InitOrRegisterSetting();
         }
 
         public void SaveSetting()
         {
-            MainWindow.SetStatusException($"MainWindowViewModel.{nameof(SaveSetting)} invoked", LogStatusLevel.Info);
-            File.WriteAllText("resources/setting.profile", JsonSerializer.Serialize(Setting, new JsonSerializerOptions() { WriteIndented = true }));
+            SettingManager.SaveSetting();
         }
     }
 }

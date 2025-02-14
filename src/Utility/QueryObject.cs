@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -70,6 +71,13 @@ namespace DiffClient.Utility
         {
             return GetSetting(mainWindow).IsPreviewDiffDecompile;
         }
+
+        public static void SetOSDateInfo(string msg, DiffTreeItem diffTreeItem)
+        {
+            if (diffTreeItem == null) { return; }
+            diffTreeItem.OS = msg.Split(';')[0];
+            diffTreeItem.Date = msg.Split(';')[1];
+        }
     }
 
     internal static class DiffClientUtility
@@ -90,6 +98,12 @@ namespace DiffClient.Utility
                 return op.FileNames;
             }
             return files;
+        }
+
+        public static void ExceptionHandled(Exception ex,string tag, string msg)
+        {
+            if (Environment.GetEnvironmentVariable("DiffClientLog") == "Debug")
+                MessageBox.Show(ex.StackTrace + "\n\n\n" + ex.Message, $"{tag} {msg}", MessageBoxButton.OKCancel);
         }
     }
 }

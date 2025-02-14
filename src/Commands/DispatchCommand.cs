@@ -54,9 +54,32 @@ namespace DiffClient.Commands
                     foreach (var item in _mainWindow?.mainWindowViewModel?.Setting?.RemoteUrls)
                     {
                         MainWindow.SetStatusException($"AccessCloud {item}", LogStatusLevel.Warning);
-                        foreach (var entry in CloudDiffDecomile.ParseFromUrl(item + "/index.json").Items)
+                        var entry = CloudDiffDecomile.ParseFromUrl(item + "/index.json");
+                        MainWindow.SetStatusException($"{entry.Date} Count: {entry.Count}", LogStatusLevel.Info);
+                        foreach (var ele_os in entry.Items)
                         {
-                            QueryObject.GetIndexTreeView(_mainWindow).Items.Add(new DiffTreeItem() { Header = entry, Foreground = Brushes.DarkGray, FullPath = _mainWindow.mainWindowViewModel.Setting.RemoteUrls[index] + $"/{entry}", Cloud = new CloudModel { Initialized = false, IsCloud = true } });
+                            foreach (var ele_mon in ele_os.Items)
+                            {
+                                foreach(var ele in ele_mon.Items)
+                                {
+                                    var treeitem = new DiffTreeItem()
+                                    {
+                                        Header = ele.File,
+                                        OS = ele_os.OS,
+                                        Date = ele_mon.Date,
+                                        IsLocal = false,
+                                        Foreground = Brushes.DarkGray,
+                                        FullPath = _mainWindow.mainWindowViewModel.Setting.RemoteUrls[index] + $"/data/{ele_os.OS}/{ele_mon.Date}/{ele.File}",
+                                        Cloud = new CloudModel
+                                        {
+                                            Initialized = false,
+                                            IsCloud = true
+                                        }
+                                    };
+                                    _mainWindow.mainWindowViewModel.TreeItemCaches.Add(treeitem);
+                                    QueryObject.GetIndexTreeView(_mainWindow).Items.Add(treeitem);
+                                }
+                            }
                         }
                         index++;
                     }

@@ -31,8 +31,8 @@ namespace DiffClient
         private static MainWindow _mainWindow;
         private static MainWindowViewModel _mainWindowViewModel;
 
-        internal HistoryFeature HistoryFeatureInstance { get; }
-        public MenuItem OpenHistoryMenuItem { get; private set; } = new MenuItem() { Header = "OpenHistory" };
+        internal HistoryFeature HistoryFeatureInstance { get; private set; }
+        public MenuItem OpenHistoryMenuItem { get; private set; }
         public TabItem IndexRootTab { get; private set; }
 
         public ICommand g_ExitCommand { get; set; }
@@ -41,14 +41,17 @@ namespace DiffClient
 
         public MainWindow()
         {
+            InitializeComponent();
+
             this.DataContext = new MainWindowViewModel(this);
             _mainWindowViewModel = this.DataContext as MainWindowViewModel;
+
             _mainWindow = this;
             keyValuePairs.Add(typeof(IndexPageView), typeof(IndexPageViewModel));
             keyValuePairs.Add(typeof(DiffDecompile), typeof(DiffDecompileViewModel));
-            HistoryFeatureInstance = new HistoryFeature(this);
             this._setTitle();
             this.Closing += MainWindow_Closing;
+
             parseCommandLinesWorkflow();
         }
         private void _setTitle()
@@ -74,25 +77,32 @@ namespace DiffClient
             }
         }
 
-        private void menu0_Initialized(object sender, EventArgs e)
+        private void initMenu()
         {
-            SetStatusException($"{nameof(MainWindow)}.{nameof(menu0_Initialized)}",LogStatusLevel.Info);
-            MenuItem file = new MenuItem() { Header = "File" };
+            HistoryFeatureInstance = new HistoryFeature(this);
 
+            SetStatusException($"{nameof(MainWindow)}.{nameof(menu0_Initialized)}", LogStatusLevel.Info);
+            MenuItem file = new MenuItem() { Header = "File" };
             file.Items.Add(new MenuItem() { Header = "Open", Command = new FileCommand(this) });
+            OpenHistoryMenuItem = new MenuItem() { Header = "OpenHistory" };
             file.Items.Add(OpenHistoryMenuItem);
-            file.Items.Add(new MenuItem() { Header = "Clear All TabItem",Command = new DispatchCommand(this),CommandParameter = DispatchEvent.CleanTablItems });
-            file.Items.Add(new MenuItem() { Header = "Setting",Command = new DispatchCommand(this),CommandParameter = DispatchEvent.OpenSetting });
-            file.Items.Add(new MenuItem() { Header = "AccessCloud",Command = new DispatchCommand(this),CommandParameter = DispatchEvent.AccessCloud });
-            HistoryFeatureInstance.initHistoryMenuItem();
+            file.Items.Add(new MenuItem() { Header = "Clear All TabItem", Command = new DispatchCommand(this), CommandParameter = DispatchEvent.CleanTablItems });
+            file.Items.Add(new MenuItem() { Header = "Setting", Command = new DispatchCommand(this), CommandParameter = DispatchEvent.OpenSetting });
+            file.Items.Add(new MenuItem() { Header = "AccessCloud", Command = new DispatchCommand(this), CommandParameter = DispatchEvent.AccessCloud });
+            this.TaskQueues.Enqueue(() => HistoryFeatureInstance.initHistoryMenuItem());
             g_ExitCommand = new ExitCommand(this);
-            file.Items.Add(new MenuItem() { Header = "Exit", Command = g_ExitCommand});
+            file.Items.Add(new MenuItem() { Header = "Exit", Command = g_ExitCommand });
             this.menu0?.Items.Add(file);
 
 
             MenuItem help = new MenuItem() { Header = "Help" };
             help.Items.Add(new MenuItem() { Header = "About", Command = new AboutCommand(this) });
             this.menu0?.Items.Add(help);
+        }
+
+        private void menu0_Initialized(object sender, EventArgs e)
+        {
+            initMenu();
         }
 
         private void rootTab_Initialized(object sender, EventArgs e)
@@ -136,7 +146,7 @@ namespace DiffClient
 
             if(_mainWindowViewModel.GlobalLogStream != null)
             {
-                string tmp = $"{DateTime.Now.ToShortDateString()} {level.ToString()} {msg}\n";
+                string tmp = $"{DateTime.Now.ToShortDateString()} {level.ToString()} {msg}\r\n";
                 byte[] data = Encoding.UTF8.GetBytes(msg);
                 _mainWindowViewModel.GlobalLogStream.Write(data, 0, data.Length);
                 _mainWindowViewModel.GlobalLogStream.Flush();
@@ -197,13 +207,40 @@ namespace DiffClient
                     // parse diff decompile
                     var diffd = new DiffDecompileManager();
                     var results = diffd.ParseFromFile(item);
-                    var father = new DiffTreeItem() { Header = $"{new FileInfo(item).Name}", Foreground = Brushes.Gray, DiffDecompileEntry = null,Cloud = new CloudModel { IsCloud = false, Initialized = true },Entries = results };
+                    var father = new DiffTreeItem()
+                    {
+                        Header = $"{new FileInfo(item).Name}",
+                        IsLocal = true,
+                        OS = "",
+                        Date = "",
+                        Foreground = Brushes.Gray,
+                        DiffDecompileEntry = null,
+                        Cloud = new CloudModel
+                        {
+                            IsCloud = false,
+                            Initialized = true
+                        },
+                        Entries = results
+                    };
+                    father.IsExpanded = true;
                     QueryObject.GetIndexTreeView(this).Items.Add(father);
                     // todo  lazy load  diff functions
                     foreach (var entry in results)
                     {
-                        father.Items.Add(new DiffTreeItem() { Header = $"{entry.PrimaryName}-{entry.SecondaryName}", Foreground = Brushes.Gray, DiffDecompileEntry = entry });
+                        father.Items.Add(new DiffTreeItem()
+                        {
+                            Header = $"{entry.PrimaryName}-{entry.SecondaryName}",
+                            Foreground = Brushes.Gray,
+                            DiffDecompileEntry = entry,
+                            Type = TreeItemType.Function,
+                            Cloud = new CloudModel
+                            {
+                                Initialized = true,
+                                IsCloud = false 
+                            },
+                        });
                     }
+                    _mainWindow.mainWindowViewModel.TreeItemCaches.Add(father);
                 }
                 else
                 {
@@ -220,7 +257,6 @@ namespace DiffClient
 
         private void g_status_Initialized(object sender, EventArgs e)
         {
-            //_mainWindow.g_status.Content = Process.GetCurrentProcess().StartInfo.Arguments;
         }
 
         private void rootTab_KeyDown(object sender, KeyEventArgs e)

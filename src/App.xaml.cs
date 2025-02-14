@@ -12,18 +12,22 @@ namespace DiffClient
     {
         public App()
         {
+            System.Diagnostics.PresentationTraceSources.DataBindingSource.Switch.Level = System.Diagnostics.SourceLevels.All;
             SetupExceptionHandling();
         }
 
         private void SetupExceptionHandling()
         {
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            {
                 DiffClient.MainWindow.SetStatusException(((Exception)e.ExceptionObject).Message);
+            };
 
             DispatcherUnhandledException += (s, e) =>
             {
                 DiffClient.MainWindow.SetStatusException(e.Exception.Message);
-                e.Handled = true;
+                if(MessageBox.Show(e.Exception.StackTrace + "\n\n\n" + e.Exception.Message, "dispatch",MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    e.Handled = true;
             };
         }
     }

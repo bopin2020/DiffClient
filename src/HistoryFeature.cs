@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -27,7 +28,7 @@ namespace DiffClient
     /// </summary>
     internal class HistoryFeature : IDisposable
     {
-        private string historyfile = @"./resources/history.txt";
+        private string historyfile = $@"./resources/history.txt";
         private MainWindow mainWindow;
         private ICommand command;
         private int _count;
@@ -37,34 +38,47 @@ namespace DiffClient
             this.mainWindow = mainWindow;
             command = new HistoryCommand(mainWindow);
         }
-
+        /// <summary>
+        /// todo  bug fix??
+        /// </summary>
         public void initHistoryMenuItem()
         {
-            if (!File.Exists(historyfile))
+            mainWindow.TaskQueues.Enqueue(() =>
             {
-                MainWindow.SetStatusException($"HistoryFeature create file", LogStatusLevel.Warning);
-                File.Create(historyfile);
-            }
-            foreach (var item in File.ReadAllLines(historyfile))
-            {
-                if (QueryObject.GetSetting(mainWindow).HistoryDisableFile)
+                foreach (var item in mainWindow.mainWindowViewModel.SettingManager.GetHistories())
                 {
-                    if (!File.Exists(item))
+                    try
                     {
-                        continue;
+                        if (QueryObject.GetSetting(mainWindow).HistoryDisableFile)
+                        {
+                            if (!File.Exists(item))
+                            {
+                                continue;
+                            }
+                        }
+                        int size = QueryObject.GetSetting(mainWindow).HistoryNumber;
+                        if (_count > size && size != 0)
+                        {
+                            break;
+                        }
+                        HistoryCacheEntry hce = new(item);
+                        _cachehistory.Add(hce);
+                        mainWindow.OpenHistoryMenuItem.Items.Add(new MenuItem()
+                        {
+                            Header = hce.FileName,
+                            Command = command,
+                            CommandParameter = hce.FileName,
+                            Foreground = !File.Exists(hce.FileName) ? Brushes.Red : Brushes.Black
+                        });
+                        _count++;
+                        MainWindow.SetStatusException($"HistoryFeature init cache history MenuItem {hce.FileName}", LogStatusLevel.Warning);
+                    }
+                    catch (Exception ex)
+                    {
+                        DiffClientUtility.ExceptionHandled(ex, "init history", item);
                     }
                 }
-                int size = QueryObject.GetSetting(mainWindow).HistoryNumber;
-                if (_count > size && size != 0)
-                {
-                    break;
-                }
-                HistoryCacheEntry hce = new(item);
-                _cachehistory.Add(hce);
-                mainWindow.OpenHistoryMenuItem.Items.Add(new MenuItem() { Header = hce.FileName, Command = command, CommandParameter = hce.FileName,Foreground = !File.Exists(hce.FileName) ? Brushes.Red : Brushes.Black } );
-                _count++;
-                MainWindow.SetStatusException($"HistoryFeature init cache history MenuItem {hce.FileName}", LogStatusLevel.Warning);
-            }
+            });
         }
 
         public void AddCache(HistoryCacheEntry cacheEntry)

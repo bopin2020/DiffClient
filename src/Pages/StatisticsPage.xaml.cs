@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+#pragma warning disable 8618
 
 namespace DiffClient.Pages
 {

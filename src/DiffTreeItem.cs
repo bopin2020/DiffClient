@@ -17,6 +17,10 @@ namespace DiffClient
 
         public bool Initialized { get; set; }
     }
+    internal class GroupDiffTreeItem : TreeViewItem
+    {
+
+    }
 
     internal class DiffTreeItem : TreeViewItem
     {
@@ -39,5 +43,23 @@ namespace DiffClient
         }
 
         public IEnumerable<DiffDecompileEntry> Entries { get; set; }
+
+        public string OS { get; set; }
+
+        public string Date { get; set; }
+
+        public bool IsLocal { get; set; }
+
+        public TreeItemType Type { get; set; }
+    }
+
+    internal enum TreeItemType : int
+    {
+        None = 0x0000,
+        Local = 0x0001,
+        Cloud = 0x0002,
+        Group = 0x0004,
+        TreeView = 0x0008,
+        Function = 0x0010,
     }
 }

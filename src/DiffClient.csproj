@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <None Remove="resources\close.png" />
-    <None Remove="resources\history.txt" />
     <None Remove="resources\indexpagetitle.png" />
     <None Remove="resources\riven.jpg" />
   </ItemGroup>
@@ -35,9 +34,6 @@
     </EmbeddedResource>
     <Content Include="resources\close.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\history.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\indexpagetitle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

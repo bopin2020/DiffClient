@@ -20,6 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+#pragma warning disable 0253
 #pragma warning disable 8600
 #pragma warning disable 8601
 
@@ -42,40 +43,46 @@ namespace DiffClient.UserControls
             TreeView tree = (TreeView)sender;
             if(tree != null)
             {
-                DiffTreeItem item = (DiffTreeItem)tree.SelectedItem;
-                if(item == null) { return; }
-                MainWindow.SetStatusException($"{nameof(IndexPageView)}.{nameof(rootTree_SelectedItemChanged)} {item.Header}", LogStatusLevel.Info);
-                item.Foreground = Brushes.Black;
-                if(item.IsDiffModuleUnit)
+                try
                 {
-                    if (item.Cloud.IsCloud)
+                    DiffTreeItem item = (DiffTreeItem)tree.SelectedItem;
+                    if (item == null) { return; }
+                    MainWindow.SetStatusException($"{nameof(IndexPageView)}.{nameof(rootTree_SelectedItemChanged)} {item.Header}", LogStatusLevel.Info);
+                    item.Foreground = Brushes.Black;
+                    if (item.IsDiffModuleUnit)
                     {
-                        MainWindow.SetStatusException($"AccessCloud diffdecompile file {item.FullPath}", LogStatusLevel.Info);
-                        _mainWindow.AddDiffDecompileToTreeViewFromUrl(item, item.FullPath);
-                    }
-                    indexFrame.NavigationService.Navigate(new StatisticsPage(_mainWindow, item.Entries.Select(x => new DiffDecompileItem()
-                    {
-                        Id = x.Id,
-                        Similarity = x.Similarity,
-                        Confidence = x.Confidence,
-                        PrimaryName = x.PrimaryName,
-                        PrimaryAddress = x.PrimaryAddress,
-                        SecondaryName = x.SecondaryName,
-                        SecondaryAddress = x.SecondaryAddress,
-                    }).ToList()));
-                    item.IsExpanded = true;
-                }
-                else
-                {
-                    if (QueryObject.EnabledPreviewDiffDecompile(_mainWindow))
-                    {
-                        indexFrame.NavigationService.Navigate(new DiffDecompilePreviewPage(_mainWindow, new DiffDecompileArgs()
+                        if (item.Cloud.IsCloud)
                         {
-                            Title = item.Header.ToString(),
-                            Primary = item.DiffDecompileEntry.PrimaryDecompileCode.Value,
-                            Secondary = item.DiffDecompileEntry.SecondaryDecompileCode.Value,
-                        }));
+                            MainWindow.SetStatusException($"AccessCloud diffdecompile file {item.FullPath}", LogStatusLevel.Info);
+                            _mainWindow.AddDiffDecompileToTreeViewFromUrl(item, item.FullPath);
+                        }
+                        indexFrame.NavigationService.Navigate(new StatisticsPage(_mainWindow, item.Entries.Select(x => new DiffDecompileItem()
+                        {
+                            Id = x.Id,
+                            Similarity = x.Similarity,
+                            Confidence = x.Confidence,
+                            PrimaryName = x.PrimaryName,
+                            PrimaryAddress = x.PrimaryAddress,
+                            SecondaryName = x.SecondaryName,
+                            SecondaryAddress = x.SecondaryAddress,
+                        }).ToList()));
+                        item.IsExpanded = true;
                     }
+                    else
+                    {
+                        if (QueryObject.EnabledPreviewDiffDecompile(_mainWindow))
+                        {
+                            indexFrame.NavigationService.Navigate(new DiffDecompilePreviewPage(_mainWindow, new DiffDecompileArgs()
+                            {
+                                Title = item.Header.ToString(),
+                                Primary = item.DiffDecompileEntry.PrimaryDecompileCode.Value,
+                                Secondary = item.DiffDecompileEntry.SecondaryDecompileCode.Value,
+                            }));
+                        }
+                    }
+                }
+                catch (Exception)
+                {
                 }
             }
         }
@@ -101,6 +108,12 @@ namespace DiffClient.UserControls
             if (tree != null)
             {
                 DiffTreeItem item = tree.SelectedItem as DiffTreeItem;
+                if(item == null)
+                {
+                    MainWindow.SetStatusException($"treeview item select type is not DiffTreeItem", LogStatusLevel.Info);
+                    return;
+                }
+
                 if(item.DiffDecompileEntry != null)
                 {
                     _mainWindow.rootTab?.Items.Add(new DiffDecompileTabItem(_mainWindow,new DiffDecompileArgs()
@@ -146,6 +159,57 @@ namespace DiffClient.UserControls
         {
             MainWindow.SetStatusException($"{nameof(IndexPageView)}.{nameof(indexFrame_Initialized)} ", LogStatusLevel.Info);
             indexFrame.NavigationService.Navigate(new IndexInitPage(_mainWindow));
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            QueryObject.GetIndexTreeView(_mainWindow).Items.Clear();
+            switch (rb.Content)
+            {
+                case "Default":
+                    foreach (var item in _mainWindow.mainWindowViewModel.TreeItemCaches)
+                    {
+                        QueryObject.GetIndexTreeView(_mainWindow).Items.Add(item);
+                    }
+                    break;
+                case "OS":
+                    foreach (var item in _mainWindow.mainWindowViewModel.TreeItemCaches.Select(x => x.OS).Distinct())
+                    {
+                        QueryObject.GetIndexTreeView(_mainWindow).Items.Add(new GroupDiffTreeItem()
+                        {
+                            Header = item,
+                        });
+                    }
+                    break;
+                case "OS-Month":
+                    foreach (var item in _mainWindow.mainWindowViewModel.TreeItemCaches.Select(x => x.OS).Distinct())
+                    {
+                        var group = new GroupDiffTreeItem()
+                        {
+                            Header = item,
+                            IsExpanded = true,
+                        };
+                        foreach (var mon in _mainWindow.mainWindowViewModel.TreeItemCaches.Where(x => x.OS == group.Header).Select(x => x.Date).Distinct())
+                        {
+                            var subgroup = new GroupDiffTreeItem()
+                            {
+                                Header = mon,
+                                IsExpanded = true
+                            };
+
+                            foreach (var ele in _mainWindow.mainWindowViewModel.TreeItemCaches.Where(x => x.OS == group.Header && x.Date == subgroup.Header).Distinct())
+                            {
+                                subgroup.Items.Add(ele);
+                            }
+                            group.Items.Add(subgroup);
+                        }
+                        QueryObject.GetIndexTreeView(_mainWindow).Items.Add(group);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

@@ -12,8 +12,21 @@
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="4*" MinWidth="400"/>
         </Grid.ColumnDefinitions>
-        <TreeView Grid.Column="0" x:Name="rootTree" SelectedItemChanged="rootTree_SelectedItemChanged" AllowDrop="True" DragDrop.DragEnter="rootTree_DragEnter" MouseDoubleClick="rootTree_MouseDoubleClick" Initialized="rootTree_Initialized">
-        </TreeView>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <GroupBox Grid.Row="0" Header="Group">
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Margin="5" Content="Default" GroupName="GroupTreeItem" Checked="RadioButton_Checked"/>
+                    <RadioButton Margin="5" Content="OS" GroupName="GroupTreeItem" Checked="RadioButton_Checked"/>
+                    <RadioButton Margin="5" Content="OS-Month" GroupName="GroupTreeItem" Checked="RadioButton_Checked"/>
+                </StackPanel>
+            </GroupBox>
+            <TreeView Grid.Row="1" x:Name="rootTree" SelectedItemChanged="rootTree_SelectedItemChanged" AllowDrop="True" DragDrop.DragEnter="rootTree_DragEnter" MouseDoubleClick="rootTree_MouseDoubleClick" Initialized="rootTree_Initialized">
+            </TreeView>
+        </Grid>
         <GridSplitter x:Name="indexsplitter" Grid.Column="1" HorizontalAlignment="Stretch" Initialized="indexsplitter_Initialized">
             
         </GridSplitter>

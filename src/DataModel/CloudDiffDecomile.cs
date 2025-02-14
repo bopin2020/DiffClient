@@ -11,13 +11,36 @@ using System.Threading.Tasks;
 
 namespace DiffClient.DataModel
 {
+    internal class Element
+    {
+        public string File { get; set; }
+    }
+
+    internal class MonthElement
+    {
+        public string Date { get; set; }
+
+        public int Count { get; set; }
+
+        public Element[] Items { get; set; }
+    }
+
+    internal class OSElement
+    {
+        public string OS { get; set; }
+
+        public int Count { get; set; }
+
+        public MonthElement[] Items { get; set; }
+    }
+
     internal class CloudDiffDecomile
     {
         public string Date { get; set; }
 
         public int Count { get; set; }
 
-        public string[] Items { get; set; }
+        public OSElement[] Items { get; set; }
 
         public static CloudDiffDecomile Parse(byte[] data)
         {

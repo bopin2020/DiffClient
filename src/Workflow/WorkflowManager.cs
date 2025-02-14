@@ -28,7 +28,7 @@ namespace DiffClient.Workflow
 
             System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += DispatcherTimer_Tick; ;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Interval = new TimeSpan(0,0, 0, 0,50);
             dispatcherTimer.Start();
             return new DiffStatus();
         }

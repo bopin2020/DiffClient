@@ -49,12 +49,6 @@ namespace DiffClient.Commands
             window.DataContext = viewmodel;
             window.ShowDialog();
             return Cancel;
-
-            //if (MessageBox.Show("是否保存设置", "setting", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-            //{
-            //    _mainWindow.mainWindowViewModel.SaveSetting();
-            //    _mainWindow.mainWindowViewModel.GlobalLogStream?.Close();
-            //}
         }
     }
 }

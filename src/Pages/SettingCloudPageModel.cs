@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#pragma warning disable 8618
+
 namespace DiffClient.Pages
 {
     internal class SettingCloudPageModel : BasePageModel<SettingCloudPage>
