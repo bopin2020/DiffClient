@@ -24,7 +24,7 @@ jobs:
       run: nuget restore src\DiffClient.sln
       
     - name: Build solution
-      run: msbuild -nologo -v:m -p:Configuration=${{ matrix.configuration }} src\DiffClient.csproj
+      run: msbuild -nologo -v:m -p:Configuration=${{ matrix.configuration }} src\DiffClient.csproj /p:Platform="x64"
 
     # Archive the package
     - name: Create archive
