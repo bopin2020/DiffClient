@@ -1,4 +1,18 @@
-## DiffClient 0.2
+DiffClient
+
+## v0.3
+
+### Features
+
+* AccessCloud feature supports grouping techniques
+
+### Bug
+
+* fix  .diffdecompile ext binding during the explorer double click fast running
+
+
+
+## v0.2
 
 2024-11-22 first commit
 
