@@ -12,9 +12,6 @@ jobs:
 
     runs-on: windows-latest
 
-    env:
-      
-
     steps:
     - name: Checkout
       uses: actions/checkout@main
