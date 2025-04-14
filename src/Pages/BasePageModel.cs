@@ -9,13 +9,19 @@ namespace DiffClient.Pages
 {
     internal abstract class BasePageModel<T> : INotifyPropertyChanged
     {
-        protected MainWindow _mainWindow { get; set; }
+        #region Private Members
+
         private T _curView;
-        protected BasePageModel(MainWindow mainWindow,T view)
-        {
-            _mainWindow = mainWindow;
-            _curView = view;
-        }
+
+        #endregion
+
+        #region Internal Members
+
+        protected MainWindow _mainWindow { get; set; }
+
+        #endregion
+
+        #region Notify Impl
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -25,6 +31,26 @@ namespace DiffClient.Pages
             {
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        #endregion
+
+        #region Public Members
+
+        public T ViewValue
+        {
+            get
+            {
+                return _curView;
+            }
+        }
+
+        #endregion
+
+        protected BasePageModel(MainWindow mainWindow,T view)
+        {
+            _mainWindow = mainWindow;
+            _curView = view;
         }
     }
 }

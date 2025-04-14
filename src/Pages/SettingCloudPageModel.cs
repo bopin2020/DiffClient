@@ -5,13 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-#pragma warning disable 8618
+#pragma warning disable
 
 namespace DiffClient.Pages
 {
     internal class SettingCloudPageModel : BasePageModel<SettingCloudPage>
     {
-        public SettingCloudPageModel(MainWindow mainWindow,SettingCloudPage cloudPage) : base(mainWindow, cloudPage) { }
+        #region Private Members
+
+
+        #endregion
+
+        #region Notify Propertys
+
         private string remoteUrls;
         public string RemoteUrls
         {
@@ -26,6 +32,7 @@ namespace DiffClient.Pages
                 OnPropertyChanged("remoteUrls");
             }
         }
+
         private string cachedir;
         public string CacheDir
         {
@@ -39,5 +46,16 @@ namespace DiffClient.Pages
                 OnPropertyChanged("cachedir");
             }
         }
+
+        #endregion
+
+        #region Public Members
+
+
+
+        #endregion
+
+        public SettingCloudPageModel(MainWindow mainWindow,SettingCloudPage cloudPage) : base(mainWindow, cloudPage) { }
+
     }
 }

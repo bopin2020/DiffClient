@@ -11,10 +11,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
+#pragma warning disable
+
 namespace DiffClient.DataModel
 {
     internal class DiffDecompileTabItem : EnhancedTabItem<DiffDecompile, DiffDecompileViewModel>
     {
-        public DiffDecompileTabItem(MainWindow mainWindow, DiffDecompileArgs args) : base(mainWindow, args.Title.ToString(), args) { }
+        public DiffDecompileTabItem(MainWindow mainWindow, DiffDecompileArgs args) : base(mainWindow, args?.Title?.ToString(), args) { }
     }
 }

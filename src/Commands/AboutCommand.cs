@@ -13,6 +13,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
+#pragma warning disable
+
 namespace DiffClient.Commands
 {
     internal class AboutCommand : ICommand

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#pragma warning disable
+
 namespace DiffClient.Workflow
 {
     internal interface IAsyncJob
@@ -21,6 +23,8 @@ namespace DiffClient.Workflow
 
     internal abstract class AsyncJobRoot : IAsyncJob
     {
+        #region Internals Member
+
         protected long _id;
         protected volatile bool isPaused;
         protected volatile bool isStopped;
@@ -30,8 +34,10 @@ namespace DiffClient.Workflow
         protected AsyncJobRoot()
         {
             token = source.Token;
-            _id = new Random().Next(0x10000,0xffffff);
+            _id = new Random().Next(0x10000, 0xffffff);
         }
+
+        #endregion
 
         public abstract bool Cancel();
         public abstract long GetJobId();
@@ -42,6 +48,8 @@ namespace DiffClient.Workflow
 
     internal class AsyncJob : AsyncJobRoot
     {
+        #region Public Members
+
         public override bool Cancel()
         {
             source.Cancel();
@@ -71,5 +79,7 @@ namespace DiffClient.Workflow
         {
             return true;
         }
+
+        #endregion
     }
 }

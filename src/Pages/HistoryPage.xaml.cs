@@ -25,5 +25,10 @@ namespace DiffClient.Pages
             InitializeComponent();
             this.DataContext = new HistoryPageModel(mainWindow, this);
         }
+
+        private void ColumnMenuClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

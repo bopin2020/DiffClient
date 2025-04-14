@@ -12,8 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-#pragma warning disable 1591
-#pragma warning disable 8600
+#pragma warning disable
 
 namespace DiffClient.Commands
 {

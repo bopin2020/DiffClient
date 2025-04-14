@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace DiffClient.UserControls
 {
-    class DiffDecompileViewModel : IViewModel
+    class DiffDecompileViewModel : BaseUserControlModel, IViewModel
     {
+        #region Private Members
+
+        private DiffDecompile _decompile;
+
+        #endregion
+
         public DiffDecompileViewModel(DiffDecompile decompile)
         {
-            
+            _decompile = decompile;
         }
     }
 }

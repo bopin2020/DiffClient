@@ -7,16 +7,23 @@ using System.Threading.Tasks;
 
 namespace DiffClient.Windows
 {
-    internal class AboutWindowViewModel
+    internal class AboutWindowViewModel : BaseWindowNotifyModel
     {
-        AboutWindow _aboutWindow;
-        public AboutWindowViewModel(AboutWindow aboutWindow)
-        {
+        #region Private Members
 
-            _aboutWindow = aboutWindow;
-        }
+        private AboutWindow _aboutWindow;
 
+        #endregion
+
+        #region Public Members
         public string DiffClientDescription { get; set; } = $"{Const.Name} {Const.Version} {Const.Author}";
         public string DiffClientLinks { get; set; } = "https://github.com/bopin2020/DiffClient";
+
+        #endregion
+
+        public AboutWindowViewModel(AboutWindow aboutWindow)
+        {
+            _aboutWindow = aboutWindow;
+        }
     }
 }

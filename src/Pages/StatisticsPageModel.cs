@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+
+#pragma warning disable 8618
 
 namespace DiffClient.Pages
 {
@@ -16,11 +20,7 @@ namespace DiffClient.Pages
     /// </summary>
     internal class StatisticsPageModel : BasePageModel<StatisticsPage>
     {
-        public StatisticsPageModel(MainWindow mainWindow, StatisticsPage view) : base(mainWindow, view)
-        {
-            //addLines();
-            addColumn();
-        }
+        #region Private Members
 
         private void addCos()
         {
@@ -94,6 +94,65 @@ namespace DiffClient.Pages
             DiffModel.Series.Add(areaSeries);
         }
 
+
+        #endregion
+
+        #region Notify Propertys
+
+        private ObservableCollection<DiffDecompileItem> _observable;
+
+        public ObservableCollection<DiffDecompileItem> ObservableItems
+        {
+            get
+            {
+                if (_observable == null)
+                {
+                    _observable = new ObservableCollection<DiffDecompileItem>();
+                }
+                return _observable;
+            }
+
+            set
+            {
+                _observable = value;
+                OnPropertyChanged("ObservableItems");
+            }
+        }
+
+        #endregion
+
+        #region Public Members
+
         public PlotModel DiffModel { get; private set; }
+
+        public List<DiffDecompileItem> DiffDecompileItems = new();
+
+        public ObservableCollection<string> AutoCompleteDataSource { get; set; } = new ObservableCollection<string>();
+
+        public string FilterCurrent { get; set; }
+
+        public void InitData(IEnumerable<DiffDecompileItem> items)
+        {
+            if (_observable == null)
+            {
+                _observable = new ObservableCollection<DiffDecompileItem>();
+            }
+            foreach (var item in items)
+            {
+                _observable.Add(item);
+                DiffDecompileItems.Add(item);
+            }
+        }
+
+        #endregion
+
+        public StatisticsPageModel(MainWindow mainWindow, StatisticsPage view) : base(mainWindow, view)
+        {
+            addColumn();
+
+            AutoCompleteDataSource.Add("contains: ");
+            AutoCompleteDataSource.Add("starts: ");
+            AutoCompleteDataSource.Add("contents: ");
+        }        
     }
 }

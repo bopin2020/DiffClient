@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+#pragma warning disable
+
 namespace DiffClient.Pages
 {
     /// <summary>
@@ -22,21 +24,11 @@ namespace DiffClient.Pages
     /// </summary>
     public partial class DiffDecompilePreviewPage : Page
     {
-        private string searchRange { get; set; }
-        public DiffDecompilePreviewPage(MainWindow mainWindow,DiffDecompileArgs item)
-        {
-            if (item == null)
-            {
-                throw new ArgumentNullException("item");
-            }
-            InitializeComponent();
-            this.DataContext = new DiffDecompilePreviewPageModel(mainWindow,this);
-            MainWindow.SetStatusException($"{nameof(DiffDecompilePreviewPage)}.SetDiffModel", LogStatusLevel.Info);
-            DiffView.OldText = item.Primary;
-            DiffView.NewText = item.Secondary;
-            searchRange = item.Secondary;
-            LoadData();
-        }
+        #region Private Members
+
+        private bool backendInit = false;
+        private bool dataformInit = false;
+        private DiffDecompilePreviewPageModel model;
 
         private void LoadData()
         {
@@ -101,7 +93,7 @@ namespace DiffClient.Pages
                         return;
                     }
 
-                    int index = searchRange.IndexOfLine(content);
+                    int index = SearchRange.IndexOfLine(content);
                     if (index == -1 || index == 0)
                     {
                         MainWindow.SetStatusException($"search {content} is not found", LogStatusLevel.Warning);
@@ -116,6 +108,49 @@ namespace DiffClient.Pages
                     MainWindow.SetStatusException($"TextBox input is invalid");
                 }
             }
+        }
+
+        private void BackendSources_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (backendInit)
+            {
+                DiffView.OldText = "test";
+                DiffView.NewText = "new test";
+            }
+            backendInit = true;
+        }
+
+        private void DataForms_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dataformInit)
+            {
+                DiffView.OldText = "test";
+                DiffView.NewText = "new test";
+            }
+            dataformInit = true;
+        }
+        
+        #endregion
+
+        #region Public Members
+
+        public string SearchRange { get; set; }
+
+        #endregion
+
+        public DiffDecompilePreviewPage(MainWindow mainWindow,DiffDecompileArgs item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+            InitializeComponent();
+            this.DataContext = model = new DiffDecompilePreviewPageModel(mainWindow, this);
+            MainWindow.SetStatusException($"{nameof(DiffDecompilePreviewPage)}.SetDiffModel", LogStatusLevel.Info);
+            DiffView.OldText = item.Primary;
+            DiffView.NewText = item.Secondary;
+            SearchRange = item.Secondary;
+            LoadData();
         }
     }
 }

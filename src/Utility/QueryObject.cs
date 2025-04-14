@@ -11,8 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-#pragma warning disable 8600
-#pragma warning disable 8603
+#pragma warning disable
 
 namespace DiffClient.Utility
 {
@@ -28,6 +27,11 @@ namespace DiffClient.Utility
         {
             MainWindow.SetStatusException($"{nameof(QueryObject)}.{nameof(GetIndexPageView)} IndexPageView", LogStatusLevel.Info);
             return Execute(_mainWindow, "IndexPageView");
+        }
+
+        public static IndexPageView GetIndexPageViewContent(MainWindow _mainWindow)
+        {
+            return GetIndexPageView(_mainWindow).Content as IndexPageView;
         }
 
         public static TreeView GetIndexTreeView(MainWindow _mainWindow)
@@ -99,7 +103,6 @@ namespace DiffClient.Utility
             }
             return files;
         }
-
         public static void ExceptionHandled(Exception ex,string tag, string msg)
         {
             if (Environment.GetEnvironmentVariable("DiffClientLog") == "Debug")

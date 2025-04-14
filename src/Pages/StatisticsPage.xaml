@@ -8,23 +8,35 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="StatisticsPage">
-
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" Name="statisticsDataGrid" IsReadOnly="True" AutoGenerateColumns="False">
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" x:Name="oldBox"/>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
+            <StackPanel Grid.Column="2" x:Name="newBox"/>
+        </Grid>
+        <TextBox Grid.Row="1" x:Name="filter_statistics" Text="*" PreviewKeyDown="filter_statistics_KeyDown" TextChanged="filter_statistics_TextChanged"/>
+        <ListBox x:Name="filterAutoComplete" Grid.Row="2" Visibility="Collapsed" MaxHeight="100" SelectedItem="{Binding FilterCurrent}" SelectionMode="Single" SelectionChanged="filterAutoComplete_SelectionChanged" ItemsSource="{Binding AutoCompleteDataSource,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+        <DataGrid Grid.Row="3" Name="statisticsDataGrid"  IsReadOnly="True" LoadingRow="statisticsDataGrid_LoadingRow" MouseDoubleClick="statisticsDataGrid_MouseDoubleClick" AutoGenerateColumns="False" ItemsSource="{Binding ObservableItems,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Binding="{Binding Id}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Similarity" Binding="{Binding Similarity}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Confidence" Binding="{Binding Confidence}"></DataGridTextColumn>
                 <DataGridTextColumn Header="PrimaryName" Binding="{Binding PrimaryName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="PrimaryAddress" Binding="{Binding PrimaryAddress}"></DataGridTextColumn>
+                <DataGridTextColumn Header="PrimaryAddress" Binding="{Binding PrimaryAddress,StringFormat={}{0:X8}}"></DataGridTextColumn>
                 <DataGridTextColumn Header="SecondaryName" Binding="{Binding SecondaryName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="SecondaryAddress" Binding="{Binding SecondaryAddress}"></DataGridTextColumn>
+                <DataGridTextColumn Header="SecondaryAddress" Binding="{Binding SecondaryAddress,StringFormat={}{0:X8}}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <!--<oxy:PlotView Grid.Row="1" Model="{Binding DiffModel}"/>-->
     </Grid>
 </Page>

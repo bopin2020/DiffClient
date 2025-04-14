@@ -10,10 +10,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
+#pragma warning disable
+
 namespace DiffClient.DataModel
 {
     internal class EnhancedTabItem<TV,TVM> : TabItem
     {
+        private ICommand _command;
+
         protected Image image = new Image()
         {
             MinWidth = 10,
@@ -22,8 +26,6 @@ namespace DiffClient.DataModel
             MaxHeight = 10,
             Source = new BitmapImage(new Uri(@"./resources/close.png", UriKind.Relative))
         };
-
-        private ICommand _command;
 
         public EnhancedTabItem(MainWindow mainWindow, string title,object args = null)
         {

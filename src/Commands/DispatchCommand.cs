@@ -1,16 +1,18 @@
 ﻿using DiffClient.DataModel;
+using DiffClient.Pages;
 using DiffClient.UserControls;
 using DiffClient.Utility;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 
-#pragma warning disable 8602
-#pragma warning disable 8605
+#pragma warning disable
 
 namespace DiffClient.Commands
 {
@@ -47,10 +49,15 @@ namespace DiffClient.Commands
                 case DispatchEvent.ExitApp:
                     break;
                 case DispatchEvent.OpenSetting:
-                    _mainWindow.rootTab?.TabControlAddAndSelect(new EnhancedTabItem<PerformanceView, PerformanceViewModel>(_mainWindow, "Setting", _mainWindow));
+                    _mainWindow.rootTab?.TabControlAddAndSelect(
+                                                                new EnhancedTabItem<PerformanceView, PerformanceViewModel>
+                                                                (_mainWindow, "Setting", _mainWindow),
+                                                                "Setting"
+                                                                );
                     break;
                 case DispatchEvent.AccessCloud:
                     int index = 0;
+                    _mainWindow.mainWindowViewModel.JobApi.AddJob("accesscloud",JobStatus.Pending, "download diff decompile file", "download", JobLevel.High);
                     foreach (var item in _mainWindow?.mainWindowViewModel?.Setting?.RemoteUrls)
                     {
                         MainWindow.SetStatusException($"AccessCloud {item}", LogStatusLevel.Warning);
@@ -76,13 +83,48 @@ namespace DiffClient.Commands
                                             IsCloud = true
                                         }
                                     };
+                                    Func<string> call = (() =>
+                                    {
+                                        return new TreeToolTipBuilder(new FileInfo(ele.File).Name).ToString();
+                                    });
+
+                                    treeitem.ToolTip = call.EnterGuard();
                                     _mainWindow.mainWindowViewModel.TreeItemCaches.Add(treeitem);
-                                    QueryObject.GetIndexTreeView(_mainWindow).Items.Add(treeitem);
+                                    QueryObject.GetIndexPageViewContent(_mainWindow).ViewModel.TreeItemsSource.Add(treeitem);
                                 }
                             }
                         }
                         index++;
                     }
+                    break;
+                case DispatchEvent.OpenLog:
+                    _mainWindow.rootTab?.TabControlAddAndSelect(
+                                                                new EnhancedTabItem<GlobalLoggerView, GlobalLoggerViewModel>
+                                                                (_mainWindow, "Log", _mainWindow),
+                                                                "Log"
+                                                                );
+                    break;
+                case DispatchEvent.Dynamic:
+                    _mainWindow.rootTab?.TabControlAddAndSelect(
+                                                                new EnhancedTabItem<DynamicColumnsView, DynamicColumnsViewModel>
+                                                                (_mainWindow, "Dynamic", _mainWindow),
+                                                                "Dynamic"
+                                                                );
+                    break;
+                case DispatchEvent.JobManager:
+                    _mainWindow.rootTab?.TabControlAddAndSelect(_mainWindow.mainWindowViewModel.JobManager,"Job Manager");
+                    break;
+                case DispatchEvent.AccessLocalStore:
+                    string dir = "D:\\Desktop\\diffdecompile\\data";
+                    _mainWindow.AddDirectoryToTreeView(dir);
+                    break;
+                case DispatchEvent.Restart:
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = Process.GetCurrentProcess().MainModule.FileName,
+                        UseShellExecute = true
+                    });
+                    App.Current.Shutdown();
                     break;
                 default:
                     break;

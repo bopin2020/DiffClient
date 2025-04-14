@@ -1,6 +1,7 @@
 ﻿using DiffEngine;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace DiffClient
     }
     internal class GroupDiffTreeItem : TreeViewItem
     {
-
+        public ObservableCollection<GroupDiffTreeItem> Children { get; set; } = new ObservableCollection<GroupDiffTreeItem>();
     }
 
     internal class DiffTreeItem : TreeViewItem
@@ -32,7 +33,7 @@ namespace DiffClient
 
         public Brush LastBackground { get; set; }
 
-        public CloudModel Cloud { get; set; }
+        public CloudModel Cloud { get; set; } = new CloudModel();
 
         public bool IsDiffModuleUnit
         {
@@ -51,6 +52,20 @@ namespace DiffClient
         public bool IsLocal { get; set; }
 
         public TreeItemType Type { get; set; }
+
+        public ObservableCollection<DiffTreeItem> Children { get; private set; } = new ObservableCollection<DiffTreeItem>();
+
+        public bool IsShowParent { get; set; } = false;
+
+        public bool ContainsEntry { get; set; }
+
+        public bool IsLocalInit { get; set; } = false;
+
+        public void AddProxy(DiffTreeItem di)
+        {
+            this.Items.Add(di);
+            this.Children.Add(di);
+        }
     }
 
     internal enum TreeItemType : int
@@ -61,5 +76,8 @@ namespace DiffClient
         Group = 0x0004,
         TreeView = 0x0008,
         Function = 0x0010,
+        LocalDirectory = 0x0020,
+        LocalRoot = 0x0040,
+        LocalTreeItem = 0x0080,
     }
 }

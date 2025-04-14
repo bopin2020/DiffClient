@@ -5,13 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#pragma warning disable
+
 namespace DiffClient.Pages
 {
     internal class GenericLogPageModel : BasePageModel<GenericLogPage>
     {
-        public GenericLogPageModel(MainWindow mainWindow, GenericLogPage view) : base(mainWindow, view)
-        {
-        }
+        #region Private Members
+
+        private GenericLogPage _genericLogPage;
+
+        #endregion
+
+        #region Notify Propertys
 
         private string _logfile;
         public string LogFile
@@ -24,7 +30,7 @@ namespace DiffClient.Pages
             {
                 MainWindow.SetStatusException($"{value} set", LogStatusLevel.Warning);
                 _mainWindow.mainWindowViewModel.Setting.LogFile = value;
-                OnPropertyChanged("_logfile");
+                OnPropertyChanged("LogFile");
             }
         }
 
@@ -39,8 +45,15 @@ namespace DiffClient.Pages
             {
                 MainWindow.SetStatusException($"{value} set", LogStatusLevel.Warning);
                 _mainWindow.mainWindowViewModel.Setting.IsPreviewDiffDecompile = value;
-                OnPropertyChanged("enabledPreviewDiffDecompile");
+                OnPropertyChanged("EnabledPreviewDiffDecompile");
             }
+        }
+
+        #endregion
+
+        public GenericLogPageModel(MainWindow mainWindow, GenericLogPage view) : base(mainWindow, view)
+        {
+            _genericLogPage = view;
         }
     }
 }

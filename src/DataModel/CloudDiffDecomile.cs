@@ -4,10 +4,13 @@ using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+
+#pragma warning disable 8618
 
 namespace DiffClient.DataModel
 {
@@ -45,17 +48,18 @@ namespace DiffClient.DataModel
         public static CloudDiffDecomile Parse(byte[] data)
         {
             var tmp = JsonSerializer.Deserialize<CloudDiffDecomile>(data);
-            return tmp;
+            if (tmp != null)
+            {
+                return tmp;
+            }
+            throw new Exception("cloud deserialize failed");
         }
 
         public static CloudDiffDecomile ParseFromFile(string filename)  => Parse(File.ReadAllBytes(filename));
         public static CloudDiffDecomile ParseFromUrl(string url)
         {
-            using(WebClient wc = new WebClient())
-            {
-                return Parse(wc.DownloadData(url));
-            }
+            HttpClient wc = new();
+            return Parse(wc.GetByteArrayAsync(url).Result);
         }
-
     }
 }

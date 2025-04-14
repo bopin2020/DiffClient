@@ -23,8 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Pages\StatisticsPage.xaml.cs~RF120cdd6.TMP" />
     <None Remove="resources\close.png" />
     <None Remove="resources\indexpagetitle.png" />
+    <None Remove="resources\refresh.ico" />
     <None Remove="resources\riven.jpg" />
   </ItemGroup>
 
@@ -41,6 +43,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="resources\refresh.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="resources\riven.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -48,12 +53,16 @@
 
   <ItemGroup>
     <PackageReference Include="DiffPlex.Wpf" Version="1.4.0" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.72.1" />
     <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="DiffEngine">
       <HintPath>thrid\DiffEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="RichTextBoxLib">
+      <HintPath>..\ext\RichTextBoxLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 

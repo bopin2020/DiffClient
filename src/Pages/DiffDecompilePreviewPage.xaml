@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
@@ -41,6 +42,10 @@
             <TextBox Grid.Column="4" Name="searchBox" VerticalAlignment="Center" KeyDown="searchBox_KeyDown"/>
         </Grid>
 
-        <diffplex:DiffViewer Grid.Row="2" x:Name="DiffView"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <ComboBox Margin="5" x:Name="BackendSources"  ItemsSource="{Binding BackendSources}" MinWidth="80" SelectedItem="{Binding BackendSourceCurrent}" SelectionChanged="BackendSources_SelectionChanged"/>
+            <ComboBox Margin="5" x:Name="DataForms"  ItemsSource="{Binding DataForms}" MinWidth="80" SelectedItem="{Binding DataFormCurrent}" SelectionChanged="DataForms_SelectionChanged"/>
+        </StackPanel>
+        <diffplex:DiffViewer Grid.Row="3" x:Name="DiffView"/>
     </Grid>
 </Page>

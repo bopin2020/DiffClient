@@ -11,8 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-#pragma warning disable 1591
-#pragma warning disable 8600
+#pragma warning disable
 
 namespace DiffClient.Commands
 {
@@ -41,7 +40,7 @@ namespace DiffClient.Commands
                 IndexPageView view = indexpageview.Content as IndexPageView;
                 foreach (var item in DiffClientUtility.OpenDiffDecompileFiles())
                 {
-                    _mainWindow.AddDiffDecompileToTreeView(item, true);
+                    _mainWindow.TaskQueues.Enqueue(() => _mainWindow.AddDiffDecompileToTreeView(item, true));
                 }
             }
         }

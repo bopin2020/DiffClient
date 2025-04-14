@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
             <Label Content="HistoryNumber: " MinWidth="30"/>
@@ -20,5 +21,30 @@
         <DockPanel Grid.Row="1">
             <CheckBox Content="HistoryDisableFile" IsChecked="{Binding HistoryDisableFile,Mode=TwoWay,UpdateSourceTrigger =PropertyChanged}"/>
         </DockPanel>
+        <ListView Grid.Row="2" x:Name="historyview" ItemsSource="{Binding Source=HistoriesData}">
+            <ListView.View>
+                <GridView AllowsColumnReorder="true"
+              ColumnHeaderToolTip="History">
+
+                    <GridViewColumn DisplayMemberBinding=
+                          "{Binding Path=Index}" 
+                      Header="Index" Width="20"/>
+
+                    <GridViewColumn DisplayMemberBinding=
+                          "{Binding Path=Value}" 
+                      >
+                        <GridViewColumnHeader>Value
+                            <GridViewColumnHeader.ContextMenu>
+                                <ContextMenu  MenuItem.Click="ColumnMenuClick" Name="ColumnMenu">
+                                    <MenuItem Header="Hide" />
+                                    <MenuItem Header="Size All Columns to fit" />
+                                </ContextMenu>
+                            </GridViewColumnHeader.ContextMenu>
+                        </GridViewColumnHeader>
+                    </GridViewColumn>
+                </GridView>
+
+            </ListView.View>
+        </ListView>
     </Grid>
 </Page>

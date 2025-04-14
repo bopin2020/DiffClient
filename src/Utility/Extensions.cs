@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
+#pragma warning disable
+
 namespace DiffClient.Utility
 {
     internal static class Extensions
@@ -58,14 +60,42 @@ namespace DiffClient.Utility
             return count;
         }
 
-        public static void TabControlAddAndSelect(this TabControl tabControl,object obj)
+        public static void TabControlAddAndSelect(this TabControl tabControl,object obj,string tag = "root")
         {
             if (tabControl == null || obj == null)
             {
                 throw new ArgumentNullException(nameof(obj));
             }
+
+            // add cache
+            TabItem item = obj as TabItem;
+            if(item == null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+
+            if (MainWindowViewModel.TabControlCached.ContainsKey(tag))
+            {
+                return;
+            }
+            MainWindowViewModel.TabControlCached.Add(tag,item);
+
             tabControl.Items.Add(obj);
             tabControl.SelectedItem = obj;
+        }
+
+        public static T EnterGuard<T>(this Func<T> call,bool isthrowexp = false)
+        {
+            try
+            {
+                return call();
+            }
+            catch (Exception)
+            {
+                if(isthrowexp)
+                    throw;
+            }
+            return default(T);
         }
     }
 }

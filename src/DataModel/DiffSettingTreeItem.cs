@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 
+#pragma warning disable
+
 namespace DiffClient.DataModel
 {
     internal class DiffSettingTreeItem : TreeViewItem

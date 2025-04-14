@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock"
         xmlns:local="clr-namespace:DiffClient"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
@@ -21,25 +22,17 @@
 
         <StatusBar x:Name="root_statusbar" Grid.Row="2" VerticalAlignment="Bottom" Background="Beige">
             <StatusBarItem>
-                <Label x:Name="g_status" Content="error code: 0"  Initialized="g_status_Initialized" Foreground="Black" ToolTip="{Binding StatusToolTip,Mode =TwoWay,UpdateSourceTrigger =PropertyChanged}" FontFamily="Comic Sans MS"/>
+                <Label x:Name="g_status" Content="error code: 0" MaxWidth="100" Initialized="g_status_Initialized" Foreground="Black" ToolTip="{Binding StatusToolTip,Mode =TwoWay,UpdateSourceTrigger =PropertyChanged}" FontFamily="Comic Sans MS"/>
             </StatusBarItem>
             <StatusBarItem>
-                <ProgressBar Width="100" Height="20"
-          Name="progressBar1">
-                    <ProgressBar.Triggers>
-                        <EventTrigger RoutedEvent="ProgressBar.Loaded">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation
-         Storyboard.TargetName="progressBar1" 
-         Storyboard.TargetProperty="Value"
-         From="0" To="100" Duration="0:0:5"  />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </ProgressBar.Triggers>
+                <ProgressBar Width="100" Height="20" Name="progressBar1" Value="{Binding WorkProgress,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 </ProgressBar>
             </StatusBarItem>
         </StatusBar>
+
+        <!--<DockingManager x:Name="dockManager"
+            Grid.Row="">
+            
+        </DockingManager>-->
     </Grid>
 </Window>

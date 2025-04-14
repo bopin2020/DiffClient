@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace DiffClient.UserControls
 {
-    internal class PerformanceViewModel : IViewModel
+    internal class PerformanceViewModel : BaseUserControlModel,IViewModel
     {
+        private PerformanceView _performanceView;
         public PerformanceViewModel(PerformanceView performanceView)
         {
-            
+            _performanceView = performanceView;
         }
     }
 }

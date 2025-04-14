@@ -17,14 +17,15 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <GroupBox Grid.Row="0" Header="Group">
-                <StackPanel Orientation="Horizontal">
-                    <RadioButton Margin="5" Content="Default" GroupName="GroupTreeItem" Checked="RadioButton_Checked"/>
-                    <RadioButton Margin="5" Content="OS" GroupName="GroupTreeItem" Checked="RadioButton_Checked"/>
-                    <RadioButton Margin="5" Content="OS-Month" GroupName="GroupTreeItem" Checked="RadioButton_Checked"/>
-                </StackPanel>
+            <GroupBox Grid.Row="0" Header="Filter">
+                <DockPanel LastChildFill="True">
+                    <Label>
+                        <Hyperlink>Filter</Hyperlink>
+                    </Label>
+                    <TextBox x:Name="difftreeFilter" Text="{Binding FilterText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                </DockPanel>
             </GroupBox>
-            <TreeView Grid.Row="1" x:Name="rootTree" SelectedItemChanged="rootTree_SelectedItemChanged" AllowDrop="True" DragDrop.DragEnter="rootTree_DragEnter" MouseDoubleClick="rootTree_MouseDoubleClick" Initialized="rootTree_Initialized">
+            <TreeView Grid.Row="1" x:Name="rootTree" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectedItemChanged="rootTree_SelectedItemChanged" AllowDrop="True" ItemsSource="{Binding TreeItemsSource,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DragDrop.DragEnter="rootTree_DragEnter" MouseDoubleClick="rootTree_MouseDoubleClick" Initialized="rootTree_Initialized">
             </TreeView>
         </Grid>
         <GridSplitter x:Name="indexsplitter" Grid.Column="1" HorizontalAlignment="Stretch" Initialized="indexsplitter_Initialized">

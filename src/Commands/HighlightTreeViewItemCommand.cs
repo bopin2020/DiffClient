@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
-#pragma warning disable 8619
+#pragma warning disable
 
 namespace DiffClient.Commands
 {

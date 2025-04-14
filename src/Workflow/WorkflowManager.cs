@@ -5,43 +5,53 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#pragma warning disable
+
 namespace DiffClient.Workflow
 {
     internal class WorkflowManager
     {
-        public MainWindow mainWindow;
+        #region Private Member
 
-        public WorkflowManager(MainWindow _mainwindow)
-        {
-            mainWindow = _mainwindow;
-        }
-
-        public DiffStatus Register()
-        {
-            mainWindow.TaskQueues.Enqueue(() =>
-            {
-                if (Environment.GetCommandLineArgs().Length == 2)
-                {
-                    mainWindow.AddDiffDecompileToTreeView(Environment.GetCommandLineArgs()[1]);
-                }
-            });
-
-            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            dispatcherTimer.Tick += DispatcherTimer_Tick; ;
-            dispatcherTimer.Interval = new TimeSpan(0,0, 0, 0,50);
-            dispatcherTimer.Start();
-            return new DiffStatus();
-        }
+        private MainWindow _mainWindow;
 
         private void DispatcherTimer_Tick(object? sender, EventArgs e)
         {
             App.Current.Dispatcher.Invoke((Action)delegate ()
             {
-                if (mainWindow.TaskQueues.TryDequeue(out var taskQueues))
+                if (_mainWindow.TaskQueues.TryDequeue(out var taskQueues))
                 {
                     taskQueues();
                 }
             });
+        }
+
+        #endregion
+
+        #region Public Members
+
+        public DiffStatus Register()
+        {
+            _mainWindow.TaskQueues.Enqueue(() =>
+            {
+                if (Environment.GetCommandLineArgs().Length == 2)
+                {
+                    _mainWindow.AddDiffDecompileToTreeView(Environment.GetCommandLineArgs()[1]);
+                }
+            });
+
+            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Tick += DispatcherTimer_Tick;
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
+            dispatcherTimer.Start();
+            return new DiffStatus();
+        }
+
+        #endregion
+
+        public WorkflowManager(MainWindow mainwindow)
+        {
+            _mainWindow = mainwindow;
         }
     }
 }

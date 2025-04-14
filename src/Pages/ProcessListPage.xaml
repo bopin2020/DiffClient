@@ -1,0 +1,34 @@
+﻿<Page x:Class="DiffClient.Pages.ProcessListPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DiffClient.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ProcessListPage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" LastChildFill="True">
+            <Button  x:Name="refreshButton" MaxWidth="20" Click="refreshButton_Click" d:IsLocked="True">
+                <Image Source="/resources/refresh.ico"/>
+            </Button>
+            <TextBox Grid.Row="0" x:Name="filter_process" Text="*" PreviewKeyDown="filter_process_KeyDown" TextChanged="filter_process_TextChanged"/>
+        </DockPanel>
+        <ListBox x:Name="filterAutoComplete" Grid.Row="1" Visibility="Collapsed" MaxHeight="100" SelectedItem="{Binding FilterCurrent}" SelectionMode="Single" SelectionChanged="filterAutoComplete_SelectionChanged" ItemsSource="{Binding AutoCompleteDataSource,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+        <DataGrid Grid.Row="2" Name="processDataGrid"  IsReadOnly="True" AutoGenerateColumns="False" LoadingRow="processDataGrid_LoadingRow" ItemsSource="{Binding ObservableItems,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Index" Binding="{Binding Index}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Pid" Binding="{Binding Pid}"></DataGridTextColumn>
+                <DataGridTextColumn Header="PPid" Binding="{Binding PPid}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"></DataGridTextColumn>
+                <DataGridTextColumn Header="FullName" Binding="{Binding FullName}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Page>

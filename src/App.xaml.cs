@@ -26,8 +26,8 @@ namespace DiffClient
             DispatcherUnhandledException += (s, e) =>
             {
                 DiffClient.MainWindow.SetStatusException(e.Exception.Message);
-                if(MessageBox.Show(e.Exception.StackTrace + "\n\n\n" + e.Exception.Message, "dispatch",MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-                    e.Handled = true;
+                e.Handled = true;
+                MainWindowViewModel.PushStrWithGuard(e.Exception.StackTrace + "\n\n\n" + e.Exception.Message);
             };
         }
     }

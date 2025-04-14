@@ -10,6 +10,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
+#pragma warning disable
+
 namespace DiffClient.Commands
 {
     internal class DeleteTreeViewItemCommand : ICommand

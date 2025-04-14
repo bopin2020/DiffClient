@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+#pragma warning disable
+
 namespace DiffClient.Commands
 {
     internal class HistoryCommand : ICommand

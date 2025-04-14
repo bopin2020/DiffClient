@@ -10,7 +10,7 @@ namespace DiffClient.Utility
     {
         internal const string Name = "DiffClient";
 
-        internal const string Version = "v0.3";
+        internal const string Version = "v0.4";
 
         internal const string Author = "bopin";
     }

@@ -10,29 +10,23 @@ using System.Windows;
 using Microsoft.Win32;
 using System.Globalization;
 
-#pragma warning disable 0252
-#pragma warning disable 8600
-#pragma warning disable 8601
-#pragma warning disable 8604
-#pragma warning disable 8605
+#pragma warning disable
 
 namespace DiffClient
 {
     internal class SettingManager
     {
+        #region Private Members
+
         private const string _regConfig = "DiffClientProfile";
         private MainWindowViewModel _mainWindowViewModel;
         private RegistryKey regKey => Registry.CurrentUser;
         private RegistryKey historyKey;
         private RegistryKey rootKey;
 
-        public SettingManager(MainWindowViewModel mainWindowViewModel)
-        {
-            _mainWindowViewModel = mainWindowViewModel;
-        }
-
         private void QueryAndSetSetting()
         {
+            if (_mainWindowViewModel == null) { return; }
             _mainWindowViewModel.Setting = new DiffSetting();
             _mainWindowViewModel.Setting.RemoteUrls = (string[])rootKey.GetValue("RemoteUrls");
             _mainWindowViewModel.Setting.CacheDirectory = (string)rootKey.GetValue("CacheDirectory");
@@ -44,6 +38,9 @@ namespace DiffClient
 
         private void StoreSetting()
         {
+            if (rootKey == null) { return; }
+            if (_mainWindowViewModel == null) { return; }
+
             rootKey.SetValue("RemoteUrls", _mainWindowViewModel.Setting.RemoteUrls);
             rootKey.SetValue("CacheDirectory", _mainWindowViewModel.Setting.CacheDirectory);
             rootKey.SetValue("LogFile", _mainWindowViewModel.Setting.LogFile);
@@ -51,6 +48,10 @@ namespace DiffClient
             rootKey.SetValue("HistoryNumber", _mainWindowViewModel.Setting.HistoryNumber);
             rootKey.SetValue("HistoryDisableFile", _mainWindowViewModel.Setting.HistoryDisableFile);
         }
+
+        #endregion
+
+        #region Public Members
 
         public void InitOrRegisterSetting()
         {
@@ -70,10 +71,10 @@ namespace DiffClient
                     hreg.SetValue("HistoryNumber", 10);
                     hreg.SetValue("HistoryDisableFile", true);
                 }
-                else 
+                else
                 {
-                    rootKey = regKey.OpenSubKey(_regConfig);
-                    historyKey = rootKey.OpenSubKey("Histories");
+                    rootKey = regKey.OpenSubKey(_regConfig, true);
+                    historyKey = rootKey.OpenSubKey("Histories", true);
                 }
                 QueryAndSetSetting();
             }
@@ -88,10 +89,9 @@ namespace DiffClient
             MainWindow.SetStatusException($"MainWindowViewModel.{nameof(SaveSetting)} invoked", LogStatusLevel.Info);
             StoreSetting();
         }
-
         public int GetHistoryMax()
         {
-            if(rootKey.GetValueKind("HistoryNumber") == RegistryValueKind.DWord)
+            if (rootKey.GetValueKind("HistoryNumber") == RegistryValueKind.DWord)
             {
                 return (int)rootKey.GetValue("HistoryNumber");
             }
@@ -103,9 +103,14 @@ namespace DiffClient
             rootKey.SetValue("HistoryNumber", size);
         }
 
-        public void SetHistories(string diffdecompile)
+        public void SetHistory(string cache) => SetHistories(new string[] { cache });
+
+        public void SetHistories(string[] caches)
         {
-            int count = historyKey.GetValueNames().Length;
+            foreach (string cache in caches)
+            {
+                historyKey.SetValue(new Random().Next(0x100000, 0xffffff).ToString(), cache, RegistryValueKind.String);
+            }
         }
 
         public string[] GetHistories()
@@ -122,6 +127,13 @@ namespace DiffClient
         {
             historyKey.Close();
             rootKey.Close();
+        }
+
+        #endregion
+
+        public SettingManager(MainWindowViewModel mainWindowViewModel)
+        {
+            _mainWindowViewModel = mainWindowViewModel;
         }
     }
 }
