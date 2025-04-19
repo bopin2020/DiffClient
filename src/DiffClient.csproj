@@ -58,6 +58,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="DiffDecompile.Core">
+      <HintPath>thrid\DiffDecompile.Core.dll</HintPath>
+    </Reference>
     <Reference Include="DiffEngine">
       <HintPath>thrid\DiffEngine.dll</HintPath>
     </Reference>

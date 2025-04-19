@@ -4,7 +4,7 @@ using DiffClient.Services;
 using DiffClient.UserControls;
 using DiffClient.Utility;
 using DiffClient.Workflow;
-using DiffEngine;
+using DiffDecompile.Core;
 using DiffEngine.Win32.Cache;
 using System.Diagnostics;
 using System.IO;
