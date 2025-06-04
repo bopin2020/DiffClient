@@ -1,8 +1,7 @@
 {
   "profiles": {
     "DiffClient": {
-      "commandName": "Project",
-      "commandLineArgs": "D:\\Desktop\\diffdecompile\\data\\win11-24h2\\2025-02\\afd-10.0.26100.3037.sys_vs_afd-10.0.26100.3194.sys.diffdecompile"
+      "commandName": "Project"
     }
   }
 }

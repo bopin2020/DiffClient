@@ -1,5 +1,8 @@
 ﻿using DiffClient.DataModel;
 using DiffClient.Utility;
+using DiffClient.Windows;
+using DiffDecompile.Core;
+using DiffPlex.WindowsForms.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +33,40 @@ namespace DiffClient.Pages
         private bool dataformInit = false;
         private DiffDecompilePreviewPageModel model;
 
+        private void LeftCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetDataObject(DiffView.OldText);
+            MessageBox.Show($"Copy Size: {DiffView.OldText.Length}");
+        }
+
+        private void LeftEdit_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new EditDiffCodeWindow(DecompileSourceType.IDAPro, DataType.Decompilation, DiffView.OldText, Callback, true);
+            window.ShowDialog();
+        }
+
+        private void RightCopy_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetDataObject(DiffView.NewText);
+            MessageBox.Show($"Copy Size: {DiffView.NewText.Length}");
+        }
+
+        private void RightEdit_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new EditDiffCodeWindow(DecompileSourceType.IDAPro, DataType.Decompilation, DiffView.NewText,Callback,false);
+            window.ShowDialog();
+        }
+        private void Callback(string code, bool isleft = false)
+        {
+            if (isleft)
+            {
+                DiffView.OldText = code;
+            }
+            else { DiffView.NewText = code; }
+
+            DiffView.Refresh();
+        }
+
         private void LoadData()
         {
             var now = DateTime.Now;
@@ -37,7 +74,6 @@ namespace DiffClient.Pages
             DiffView.Foreground = new SolidColorBrush(isDark ? Color.FromRgb(240, 240, 240) : Color.FromRgb(32, 32, 32));
             DiffView.SetHeaderAsOldToNew();
         }
-
         private void DiffButton_Click(object sender, RoutedEventArgs e)
         {
             if (DiffView.IsInlineViewMode)

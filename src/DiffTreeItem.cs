@@ -1,4 +1,5 @@
-﻿using DiffEngine;
+﻿using DiffDecompile.Core;
+using DiffEngine;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

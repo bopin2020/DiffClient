@@ -46,6 +46,32 @@
             <ComboBox Margin="5" x:Name="BackendSources"  ItemsSource="{Binding BackendSources}" MinWidth="80" SelectedItem="{Binding BackendSourceCurrent}" SelectionChanged="BackendSources_SelectionChanged"/>
             <ComboBox Margin="5" x:Name="DataForms"  ItemsSource="{Binding DataForms}" MinWidth="80" SelectedItem="{Binding DataFormCurrent}" SelectionChanged="DataForms_SelectionChanged"/>
         </StackPanel>
-        <diffplex:DiffViewer Grid.Row="3" x:Name="DiffView"/>
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <GroupBox Header="Old" Grid.Column="0">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Margin="5" Content="Copy" Click="LeftCopy_Click"/>
+                        <Button Margin="5" Content="Edit" Click="LeftEdit_Click"/>
+                    </StackPanel>
+                </GroupBox>
+                <GridSplitter Grid.Column="1" Width="5"/>
+                <GroupBox Header="New" Grid.Column="2">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Margin="5" Grid.Column="3" Content="Copy" Click="RightCopy_Click"/>
+                        <Button Margin="5" Grid.Column="4" Content="Edit" Click="RightEdit_Click"/>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+            <diffplex:DiffViewer Grid.Row="1" x:Name="DiffView"/>
+        </Grid>
     </Grid>
 </Page>

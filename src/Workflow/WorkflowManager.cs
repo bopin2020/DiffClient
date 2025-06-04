@@ -36,15 +36,19 @@ namespace DiffClient.Workflow
             {
                 if (Environment.GetCommandLineArgs().Length == 2)
                 {
-                    _mainWindow.AddDiffDecompileToTreeView(Environment.GetCommandLineArgs()[1]);
+                    _mainWindow.AddDiffDecompileToTreeView(Environment.GetCommandLineArgs()[1],cache: true);
                 }
             });
+            InitTimer();
+            return new DiffStatus();
+        }
 
+        public void InitTimer()
+        {
             System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += DispatcherTimer_Tick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 50);
             dispatcherTimer.Start();
-            return new DiffStatus();
         }
 
         #endregion

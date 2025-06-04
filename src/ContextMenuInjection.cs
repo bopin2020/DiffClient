@@ -33,6 +33,8 @@ namespace DiffClient
         public RichTextBox RichTextBox { get; set; }
 
         public Frame indexFrame { get; set; }
+
+        public TabItem tabItem { get; set; }
     }
 
     internal class ContextMenuInjection<CMD,COMPARA>
@@ -67,6 +69,7 @@ namespace DiffClient
                 cmc.ViewAndViewModelContext = _ctx.ViewAndViewModelContext;
                 cmc.indexFrame = _ctx.indexFrame;
                 cmc.CommandParameter = item.GetValue(null);
+                cmc.tabItem = _ctx.tabItem;
 
                 ctxm.Items.Add(new MenuItem()
                 {
@@ -117,6 +120,13 @@ namespace DiffClient
     internal class StatisticsInject : ContextMenuInjection<StatisticsCommand, StatisticsCommandRouteEvent>
     {
         public StatisticsInject(ContextMenuContext ctx) : base(ctx)
+        {
+        }
+    }
+
+    internal class EnhancedTabItemInject : ContextMenuInjection<EnhancedTabItemCommand, EnhancedTabItemCommandRouteEvent>
+    {
+        public EnhancedTabItemInject(ContextMenuContext ctx) : base(ctx)
         {
         }
     }

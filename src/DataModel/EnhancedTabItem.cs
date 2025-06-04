@@ -17,7 +17,7 @@ namespace DiffClient.DataModel
     internal class EnhancedTabItem<TV,TVM> : TabItem
     {
         private ICommand _command;
-
+        private MainWindow _mainWindow;
         protected Image image = new Image()
         {
             MinWidth = 10,
@@ -29,6 +29,7 @@ namespace DiffClient.DataModel
 
         public EnhancedTabItem(MainWindow mainWindow, string title,object args = null)
         {
+            _mainWindow = mainWindow;
             _command = new EnhancedTabItemCommand(mainWindow);
 
             StackPanel sp = new StackPanel();
@@ -40,6 +41,13 @@ namespace DiffClient.DataModel
             Background = Brushes.White;
             Content = args != null ? Activator.CreateInstance(typeof(TV), args) : Activator.CreateInstance(typeof(TV));
             DataContext = Activator.CreateInstance(typeof(TVM),Content);
+
+            this.ContextMenu = new EnhancedTabItemInject(new ContextMenuContext()
+            {
+                MainWindow = _mainWindow,
+                ViewAndViewModelContext = DataContext,
+                tabItem = this
+            }).Register();
         }
     }
 }

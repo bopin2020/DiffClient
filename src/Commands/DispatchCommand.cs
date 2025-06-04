@@ -126,6 +126,11 @@ namespace DiffClient.Commands
                     });
                     App.Current.Shutdown();
                     break;
+                case DispatchEvent.ClearHistories:
+                    {
+                        _mainWindow.HistoryFeatureInstance.Clear(hard: true);
+                    }
+                    break;
                 default:
                     break;
             }

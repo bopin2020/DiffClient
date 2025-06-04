@@ -17,5 +17,6 @@ namespace DiffClient.DataModel
         JobManager = 6,
         AccessLocalStore = 7,
         Restart = 8,
+        ClearHistories = 9,
     }
 }

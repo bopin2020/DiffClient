@@ -1,0 +1,38 @@
+﻿<Window x:Class="DiffClient.Windows.HistoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiffClient.Windows"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="HistoryWindow" Height="450" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Button Margin="2"  Content="{Binding New}" MinWidth="100" Click="New_Click"/>
+                <TextBlock Text="{Binding New_Desc}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Button Margin="2"  Content="{Binding Go}" MinWidth="100" Click="Go_Click"/>
+                <TextBlock Text="{Binding Go_Desc}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <Button Margin="2"  Content="{Binding Previous}" MinWidth="100" Click="Previous_Click"/>
+                <TextBlock Text="{Binding Previous_Desc}"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Frame x:Name="historyFrame" Initialized="historyFrame_Initialized"/>
+        </Grid>
+    </Grid>
+</Window>

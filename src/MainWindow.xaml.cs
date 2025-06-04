@@ -47,6 +47,11 @@ namespace DiffClient
                 throw new Exception("workflow register failed");
             }
         }
+        private void parseHistoryWorkflow()
+        {
+            var workflow = new WorkflowManager(this);
+            workflow.InitTimer();
+        }
 
         private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -80,6 +85,7 @@ namespace DiffClient
             MenuItem features = new MenuItem() { Header = "Feature" };
             features.Items.Add(new MenuItem() { Header = "Dynamic grid", Command = new DispatchCommand(this), CommandParameter = DispatchEvent.Dynamic });
             features.Items.Add(new MenuItem() { Header = "Job Manager", Command = new DispatchCommand(this), CommandParameter = DispatchEvent.JobManager });
+            features.Items.Add(new MenuItem() { Header = "Clear History", Command = new DispatchCommand(this), CommandParameter = DispatchEvent.ClearHistories });
             this.menu0?.Items.Add(features);
 
             MenuItem help = new MenuItem() { Header = "Help" };
@@ -283,7 +289,7 @@ namespace DiffClient
                     DiffDecompileCache.Add(item, 0);
                     if (cache)
                     {
-                        _mainWindow.HistoryFeatureInstance.AddCache(new HistoryCacheEntry(item));
+                        _mainWindow.HistoryFeatureInstance.AddCache(new HistoryCacheEntry(item),hard: true);
                     }
 
                     // parse diff decompile
@@ -352,7 +358,7 @@ namespace DiffClient
 
         #endregion
 
-        public MainWindow()
+        public MainWindow(string path = "")
         {
             InitializeComponent();
 
@@ -364,9 +370,18 @@ namespace DiffClient
             keyValuePairs.Add(typeof(DiffDecompile), typeof(DiffDecompileViewModel));
             this._setTitle();
             this.Closing += MainWindow_Closing;
-
-            parseCommandLinesWorkflow();
-
+            if (!String.IsNullOrEmpty(path))
+            {
+                _mainWindow.TaskQueues.Enqueue(() =>
+                {
+                    _mainWindow.AddDiffDecompileToTreeView(path, cache: false);
+                });
+                parseHistoryWorkflow();
+            }
+            else
+            {
+                parseCommandLinesWorkflow();
+            }
             _mainWindowViewModel.xxxBuilderService = new Services.xxxBuilder(this);
         }
     }

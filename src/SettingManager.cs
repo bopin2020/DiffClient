@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
 using System.Globalization;
+using System.Windows.Documents;
 
 #pragma warning disable
 
@@ -19,6 +20,7 @@ namespace DiffClient
         #region Private Members
 
         private const string _regConfig = "DiffClientProfile";
+        private int _size = 0;
         private MainWindowViewModel _mainWindowViewModel;
         private RegistryKey regKey => Registry.CurrentUser;
         private RegistryKey historyKey;
@@ -76,6 +78,7 @@ namespace DiffClient
                     rootKey = regKey.OpenSubKey(_regConfig, true);
                     historyKey = rootKey.OpenSubKey("Histories", true);
                 }
+                _size = historyKey.GetValueNames().Length;
                 QueryAndSetSetting();
             }
             catch (Exception ex)
@@ -91,25 +94,44 @@ namespace DiffClient
         }
         public int GetHistoryMax()
         {
-            if (rootKey.GetValueKind("HistoryNumber") == RegistryValueKind.DWord)
-            {
-                return (int)rootKey.GetValue("HistoryNumber");
-            }
-            return 0;
+            return Convert.ToInt32(rootKey.GetValue("HistoryNumber"));
         }
 
         public void SetHistoryMax(int size)
         {
             rootKey.SetValue("HistoryNumber", size);
         }
+        /// <summary>
+        /// Least-Recencly-Used LRU Cache Algo
+        /// </summary>
+        /// <param name="cache"></param>
+        public void SetHistory(string cache)
+        {
+            if (GetHistories().Contains(cache))
+            {
+                return;
+            }
 
-        public void SetHistory(string cache) => SetHistories(new string[] { cache });
+            // step1. check size < capability
+            if (_size == 0 || _size < GetHistoryMax())
+            {
+                historyKey.SetValue(DateTime.Now.ToString(), cache, RegistryValueKind.String);
+                _size++;
+            }
+            else
+            {
+                // step2. if the size full, we need to use LRU Least Recently Used
+                var dt = historyKey.GetValueNames().Select(x => DateTime.Parse(x)).OrderBy(x => x).FirstOrDefault();
+                historyKey.DeleteValue(dt.ToString());
+                historyKey.SetValue(DateTime.Now.ToString(), cache, RegistryValueKind.String);
+            }
+        }
 
         public void SetHistories(string[] caches)
         {
             foreach (string cache in caches)
             {
-                historyKey.SetValue(new Random().Next(0x100000, 0xffffff).ToString(), cache, RegistryValueKind.String);
+                historyKey.SetValue(DateTime.Now.ToString(), cache, RegistryValueKind.String);
             }
         }
 
@@ -127,6 +149,14 @@ namespace DiffClient
         {
             historyKey.Close();
             rootKey.Close();
+        }
+
+        public void ClearHistories()
+        {
+            foreach (string s in historyKey.GetValueNames())
+            {
+                historyKey.DeleteValue(s);
+            }
         }
 
         #endregion

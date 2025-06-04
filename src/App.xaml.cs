@@ -2,6 +2,7 @@
 using System.Data;
 using System.Diagnostics;
 using System.Windows;
+using DiffClient.Windows;
 
 namespace DiffClient
 {
@@ -30,6 +31,22 @@ namespace DiffClient
                 MainWindowViewModel.PushStrWithGuard(e.Exception.StackTrace + "\n\n\n" + e.Exception.Message);
             };
         }
-    }
 
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            if (Environment.GetCommandLineArgs().Length == 2)
+            {
+                var view = new MainWindow();
+                var viewModel = new MainWindowViewModel(view);
+                view.DataContext = viewModel;
+                view.ShowDialog();
+            }
+            else
+            {
+                var hw = new HistoryWindow();
+                hw.DataContext = new HistoryWindowViewModel(hw);
+                hw.ShowDialog();
+            }
+        }
+    }
 }

@@ -195,6 +195,9 @@ namespace DiffClient.UserControls
             cm.Items.Add(new Separator());
             cm.Items.Add(new MenuItem() { Header = "Highlight", Command = new HighlightTreeViewItemCommand(_mainWindow) });
             cm.Items.Add(new MenuItem() { Header = "Delete", Command = new DeleteTreeViewItemCommand(_mainWindow) });
+            cm.Items.Add(new Separator());
+            cm.Items.Add(new MenuItem() { Header = "Copy", Command = new CopyTreeViewItemCommand(_mainWindow),CommandParameter = CopyTreeViewItemRouteEvent.Copy });
+            cm.Items.Add(new MenuItem() { Header = "Copy Functions", Command = new CopyTreeViewItemCommand(_mainWindow), CommandParameter = CopyTreeViewItemRouteEvent.CopyFunctions });
             rootTree.ContextMenu = cm;
         }
 

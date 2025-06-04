@@ -53,7 +53,7 @@ namespace DiffClient
                     try
                     {
                         int size = QueryObject.GetSetting(mainWindow).HistoryNumber;
-                        if (_count > size && size != 0)
+                        if (_count >= size && size != 0)
                         {
                             break;
                         }
@@ -65,7 +65,7 @@ namespace DiffClient
                             Header = hce.FileName,
                             Command = command,
                             CommandParameter = hce.FileName,
-                            Foreground = Brushes.Black
+                            Foreground = File.Exists(hce.FileName) ? Brushes.Black : Brushes.Red,
                         });
                         _count++;
                         MainWindow.SetStatusException($"HistoryFeature init cache history MenuItem {hce.FileName}", LogStatusLevel.Warning);
@@ -78,15 +78,26 @@ namespace DiffClient
             });
         }
 
-        public void AddCache(HistoryCacheEntry cacheEntry)
+        public void AddCache(HistoryCacheEntry cacheEntry,bool hard = false)
         {
-            _cachehistory.Add(cacheEntry);
+            if (hard)
+            {
+                mainWindow.mainWindowViewModel.SettingManager.SetHistory(cacheEntry.FileName);
+            }
+            else
+            {
+                _cachehistory.Add(cacheEntry);
+            }
             MainWindow.SetStatusException($"HistoryFeature AddCache {cacheEntry.FileName}", LogStatusLevel.Warning);
         }
 
-        public void Clear()
+        public void Clear(bool hard = false)
         {
             _cachehistory.Clear();
+            if (hard)
+            {
+                mainWindow.mainWindowViewModel.SettingManager.ClearHistories();
+            }
             MainWindow.SetStatusException($"HistoryFeature cache clear", LogStatusLevel.Warning);
         }
 

@@ -28,6 +28,7 @@
     <None Remove="resources\indexpagetitle.png" />
     <None Remove="resources\refresh.ico" />
     <None Remove="resources\riven.jpg" />
+    <None Remove="Windows\2oxlsrql.5sj~" />
   </ItemGroup>
 
   <ItemGroup>
