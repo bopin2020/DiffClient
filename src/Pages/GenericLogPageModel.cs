@@ -49,6 +49,21 @@ namespace DiffClient.Pages
             }
         }
 
+        private bool showDialog;
+        public bool ShowDialog
+        {
+            get
+            {
+                return QueryObject.GetSetting(_mainWindow).ShowDialog;
+            }
+            set
+            {
+                MainWindow.SetStatusException($"{value} set", LogStatusLevel.Warning);
+                _mainWindow.mainWindowViewModel.Setting.ShowDialog = value;
+                OnPropertyChanged("ShowDialog");
+            }
+        }
+
         #endregion
 
         public GenericLogPageModel(MainWindow mainWindow, GenericLogPage view) : base(mainWindow, view)

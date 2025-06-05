@@ -22,5 +22,7 @@ namespace DiffClient.DataModel
         public short HistoryNumber { get; set; }
 
         public bool HistoryDisableFile { get; set; }
+
+        public bool ShowDialog { get; set; }
     }
 }

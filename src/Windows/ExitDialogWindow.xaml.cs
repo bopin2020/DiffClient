@@ -20,12 +20,14 @@ namespace DiffClient.Windows
     /// </summary>
     public partial class ExitDialogWindow : Window
     {
+        private MainWindow _window;
         private ExitCommand _exitCommand;
-        public ExitDialogWindow(ExitCommand exitCommand)
+        public ExitDialogWindow(MainWindow window,ExitCommand exitCommand)
         {
             InitializeComponent();
             this.Title = "Save database";
             _exitCommand = exitCommand;
+            _window = window;
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -43,6 +45,16 @@ namespace DiffClient.Windows
         {
             _exitCommand.Cancel = false;
             this.Close();
+        }
+
+        private void Show_Checked(object sender, RoutedEventArgs e)
+        {
+            _window.mainWindowViewModel.SettingManager.SetValue("ShowDialog", 1);
+        }
+
+        private void NotShow_Checked(object sender, RoutedEventArgs e)
+        {
+            _window.mainWindowViewModel.SettingManager.SetValue("ShowDialog", 0);
         }
     }
 }

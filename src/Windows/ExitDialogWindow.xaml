@@ -60,7 +60,7 @@
         </GroupBox>
         <GroupBox Header="Whether Store To Local Disk" Grid.Row="2">
             <StackPanel>
-                <CheckBox Content="{Binding NotMemory}" Margin="10" FontWeight="Black"/>
+                <CheckBox Content="{Binding NotMemory}" Margin="10" FontWeight="Black" Checked="NotShow_Checked" Unchecked="Show_Checked"/>
                 <CheckBox Content="{Binding NotStoreDB}" Margin="10" FontWeight="Black" Checked="NotStore_Checked"/>
             </StackPanel>
         </GroupBox>

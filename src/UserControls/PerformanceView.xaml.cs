@@ -77,14 +77,22 @@ namespace DiffClient.UserControls
         private MainWindow _mainWindow;
         private NavigationServiceManager _navigationServiceManager;
 
+        private Dictionary<string, Page> modulePages = new Dictionary<string, Page>();
+
         private void settingTree_Initialized(object sender, EventArgs e)
         {
             MainWindow.SetStatusException($"{nameof(IndexPageView)}.{nameof(settingTree_Initialized)} ", LogStatusLevel.Info);
-            settingTree.Items.Add(new DiffSettingTreeItem() { ModuleName = "Cloud Service", Header = "Cloud Service" });
-            settingTree.Items.Add(new DiffSettingTreeItem() { ModuleName = "GenericProperty", Header = "Log" });
-            settingTree.Items.Add(new DiffSettingTreeItem() { ModuleName = "Preview", Header = "EnabledPreviewDiffDecompile" });
-            settingTree.Items.Add(new DiffSettingTreeItem() { ModuleName = "History", Header = "History" });
-            settingTree.Items.Add(new DiffSettingTreeItem() { ModuleName = "Misc", Header = "Process" });
+            modulePages.Add("Cloud Service", new SettingCloudPage(_mainWindow));
+            modulePages.Add("GenericProperty", new GenericLogPage(_mainWindow));
+            modulePages.Add("History", new HistoryPage(_mainWindow));
+            modulePages.Add("Process", new ProcessListPage(_mainWindow, Help.GetProcesses()));
+
+            settingTree.Items.Add(new DiffSettingTreeItem() { ModuleName = "Cloud Service", Header = "Cloud Service", RegisterService = modulePages["Cloud Service"] });
+            settingTree.Items.Add(new DiffSettingTreeItem() { ModuleName = "GenericProperty", Header = "Log",RegisterService = modulePages["GenericProperty"] });
+            settingTree.Items.Add(new DiffSettingTreeItem() { ModuleName = "GenericProperty", Header = "Generic",RegisterService = modulePages["GenericProperty"] });
+            settingTree.Items.Add(new DiffSettingTreeItem() { ModuleName = "GenericProperty", Header = "EnabledPreviewDiffDecompile",RegisterService = modulePages["GenericProperty"] });
+            settingTree.Items.Add(new DiffSettingTreeItem() { ModuleName = "History", Header = "History",RegisterService = modulePages["History"] });
+            settingTree.Items.Add(new DiffSettingTreeItem() { ModuleName = "Misc", Header = "Process",RegisterService = modulePages["Process"] });
         }
 
         private void settingTree_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -96,29 +104,13 @@ namespace DiffClient.UserControls
         {
             MainWindow.SetStatusException($"{nameof(IndexPageView)}.{nameof(settingTree_MouseDoubleClick)} ", LogStatusLevel.Info);
             DiffSettingTreeItem diffSettingTreeItem = settingTree.SelectedItem as DiffSettingTreeItem;
+            settingFrame.NavigationService.Navigate(diffSettingTreeItem.RegisterService);
 
             if (diffSettingTreeItem.Header.ToString() == "Cloud Service")
             {
                 // todo 
                 //_navigationServiceManager.OpenStateMachine(diffSettingTreeItem, new SettingCloudPage(_mainWindow));
                 //_navigationServiceManager.ProxyInvoke();
-                settingFrame.NavigationService.Navigate(new SettingCloudPage(_mainWindow));
-            }
-            else if (diffSettingTreeItem.Header.ToString() == "Log")
-            {
-                settingFrame.NavigationService.Navigate(new GenericLogPage(_mainWindow));
-            }
-            else if (diffSettingTreeItem.Header.ToString() == "EnabledPreviewDiffDecompile")
-            {
-                settingFrame.NavigationService.Navigate(new GenericLogPage(_mainWindow));
-            }
-            else if (diffSettingTreeItem.Header.ToString() == "History")
-            {
-                settingFrame.NavigationService.Navigate(new HistoryPage(_mainWindow));
-            }
-            else if (diffSettingTreeItem.Header.ToString() == "Process")
-            {
-                settingFrame.NavigationService.Navigate(new ProcessListPage(_mainWindow, Help.GetProcesses()));
             }
         }
 

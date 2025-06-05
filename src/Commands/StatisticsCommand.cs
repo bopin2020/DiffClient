@@ -40,7 +40,7 @@ namespace DiffClient.Commands
         public void Execute(object? parameter)
         {
             var ctx = parameter as ContextMenuContext;
-            if (ctx.DataGrid == null)
+            if (ctx == null || ctx.DataGrid == null)
             {
                 return;
             }
@@ -63,7 +63,7 @@ namespace DiffClient.Commands
                     var selectedItem = ctx.DataGrid.SelectedItem;
                     if (selectedItem != null)
                     {
-                        DataGridRow row = ctx.DataGrid.ItemContainerGenerator.ContainerFromItem(selectedItem) as DataGridRow;
+                        DataGridRow row = ctx.DataGrid?.ItemContainerGenerator.ContainerFromItem(selectedItem) as DataGridRow;
                         if (row != null)
                         {
                             row.Background = Brushes.AliceBlue;

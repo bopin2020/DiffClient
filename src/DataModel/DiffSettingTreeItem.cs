@@ -18,5 +18,7 @@ namespace DiffClient.DataModel
         public Brush DefaultBackground { get; set; } = Brushes.White;
 
         public Brush LastBackground { get; set; }
+
+        public Page RegisterService { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 #pragma warning disable
 
@@ -43,7 +44,13 @@ namespace DiffClient.Commands
         public bool ExitFromClick(bool click)
         {
             MainWindow.SetStatusException($"{nameof(ExitCommand)} invoked", LogStatusLevel.Warning);
-            var window = new ExitDialogWindow(this);
+            int flag = (int)_mainWindow.mainWindowViewModel.SettingManager.GetValue("ShowDialog");
+            if (flag == 0)
+            {
+                return false;
+            }
+
+            var window = new ExitDialogWindow(_mainWindow,this);
             var viewmodel = new ExitDialogWindowViewModel(window);
             window.DataContext = viewmodel;
             window.ShowDialog();

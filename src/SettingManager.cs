@@ -10,6 +10,7 @@ using System.Windows;
 using Microsoft.Win32;
 using System.Globalization;
 using System.Windows.Documents;
+using System.Drawing;
 
 #pragma warning disable
 
@@ -157,6 +158,16 @@ namespace DiffClient
             {
                 historyKey.DeleteValue(s);
             }
+        }
+
+        public object GetValue(string key)
+        {
+            return rootKey.GetValue(key);
+        }
+
+        public void SetValue(string key, object value)
+        {
+            rootKey.SetValue(key,value);
         }
 
         #endregion

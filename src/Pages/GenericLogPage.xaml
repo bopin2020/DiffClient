@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
             <Label Content="FileName : "/>
@@ -19,6 +20,9 @@
         </DockPanel>
         <DockPanel Grid.Row="1">
             <CheckBox Content="EnabledPreviewDiffDecompile" IsChecked="{Binding EnabledPreviewDiffDecompile,Mode=TwoWay,UpdateSourceTrigger =PropertyChanged}"/>
+        </DockPanel>
+        <DockPanel Grid.Row="2">
+            <CheckBox Content="ShowDialog" IsChecked="{Binding ShowDialog,Mode=TwoWay,UpdateSourceTrigger =PropertyChanged}"/>
         </DockPanel>
     </Grid>
 </Page>
