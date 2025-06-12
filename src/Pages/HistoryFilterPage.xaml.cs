@@ -186,7 +186,7 @@ namespace DiffClient.Pages
             var view = new MainWindow(currow.Value);
             var viewModel = new MainWindowViewModel(view);
             view.DataContext = viewModel;
-            view.ShowDialog();
+            view.Show();
 
             _window.Close();
         }
