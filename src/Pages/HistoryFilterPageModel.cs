@@ -6,11 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using OxyPlot;
 
+#pragma warning disable
+
 namespace DiffClient.Pages
 {
     public class HistoryEntry
     {
-        public string Value { get; set; }
+        public string FullName { get; set; }
+        public string Value
+        {
+            get
+            {
+                // todo  map a long long string to one short format
+                return FullName;
+            }
+        }
     }
 
     internal class HistoryFilterPageModel : BasePageModel<HistoryFilterPage>

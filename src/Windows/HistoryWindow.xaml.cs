@@ -48,7 +48,7 @@ namespace DiffClient.Windows
                 SettingManager = new SettingManager(null);
                 SettingManager.InitOrRegisterSetting();
             }
-            historyFrame.NavigationService.Navigate(new HistoryFilterPage(this,SettingManager.GetHistories().Select(x => new HistoryEntry() { Value = x })));
+            historyFrame.NavigationService.Navigate(new HistoryFilterPage(this,SettingManager.GetHistories().Select(x => new HistoryEntry() { FullName = x })));
         }
     }
 }

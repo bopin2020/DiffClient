@@ -143,7 +143,9 @@ namespace DiffClient
             {
                 list.Add((string)historyKey.GetValue(s));
             }
-            return list.ToArray();
+            var result = list.ToArray();
+            Array.Reverse(result);
+            return result;
         }
 
         public void Close()
