@@ -11,6 +11,7 @@ namespace DiffClient.Services
     {
         private MainWindow _mainWindow;
         private TabControl _tabControl;
+        private string _message;
 
         public JobContextObj(MainWindow mainWindow)
         {
@@ -21,5 +22,7 @@ namespace DiffClient.Services
         public MainWindow MainWindow => _mainWindow;
 
         public TabControl TabControl => _tabControl;
+
+        public string Message { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DiffClient.UserControls
 {
@@ -47,8 +47,17 @@ namespace DiffClient.UserControls
         public GlobalLoggerView(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
+            var vm = _mainWindow.mainWindowViewModel;
+            vm.GlobalLogStream = new FileStream(Path.Combine(vm.DiffClientWorkDir.FullName,Guid.NewGuid().ToString().Substring(0,8) + ".log"),FileMode.OpenOrCreate,FileAccess.ReadWrite);
             InitializeComponent();
             initContextMenu();
+        }
+
+        ~GlobalLoggerView()
+        {
+            _mainWindow.mainWindowViewModel.GlobalLogStream.Flush();
+            _mainWindow.mainWindowViewModel.GlobalLogStream.Dispose();
+            _mainWindow.mainWindowViewModel.GlobalLogStream.Close();
         }
     }
 }

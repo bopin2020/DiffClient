@@ -45,6 +45,13 @@ namespace DiffClient
             {
                 JobApi.AddJob($"test_{i}", JobStatus.Pending, "this is a test", "test", JobLevel.Medium);
             }
+
+            init();
+        }
+
+        ~MainWindowViewModel()
+        {
+            unInit();
         }
     }
 
@@ -57,6 +64,17 @@ namespace DiffClient
         {
             SettingManager.InitOrRegisterSetting();
         }
+
+        private void init()
+        {
+            DiffClientWorkDir = Directory.CreateDirectory(Guid.NewGuid().ToString().Replace("-", ""));
+        }
+
+        private void unInit()
+        {
+            DiffClientWorkDir.Delete(true);
+        }
+
         #endregion
 
         #region Notify Property
@@ -103,6 +121,8 @@ namespace DiffClient
 
         public FileStream GlobalLogStream { get; set; }
         public DiffSetting Setting { get; set; }
+
+        public DirectoryInfo DiffClientWorkDir { get; set; }
 
         public ObservableCollection<DiffTreeItem> TreeItemCaches { get; set; } = new ObservableCollection<DiffTreeItem>();
 

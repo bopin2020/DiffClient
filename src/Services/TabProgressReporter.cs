@@ -27,8 +27,10 @@ namespace DiffClient.Services
                 if (glv!=null)
                 {
                     ParagraphRun pc = new ParagraphRun();
-
                     glv.richtextbox.Document.Blocks.Add(pc.AddStr($"{nameof(TabProgressReporter)} {_count}", Brushes.Green));
+
+                    ParagraphRun pc2 = new ParagraphRun();
+                    glv.richtextbox.Document.Blocks.Add(pc.AddStr($"{context.Message} {_count}", Brushes.Black));
                 }
             }
             _count++;

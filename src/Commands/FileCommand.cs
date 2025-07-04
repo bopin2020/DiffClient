@@ -2,6 +2,7 @@
 using DiffClient.Utility;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -33,15 +34,23 @@ namespace DiffClient.Commands
 
         public void Execute(object? parameter)
         {
-            MainWindow.SetStatusException($"{nameof(FileCommand)} invoked", LogStatusLevel.Warning);
-            TabItem indexpageview = _mainWindow?.rootTab.Items.Cast<TabItem>().Where(x => x.Content.GetType().Name == "IndexPageView").FirstOrDefault();
-            if(indexpageview != null)
+            if (parameter == null)
             {
-                IndexPageView view = indexpageview.Content as IndexPageView;
-                foreach (var item in DiffClientUtility.OpenDiffDecompileFiles())
+                MainWindow.SetStatusException($"{nameof(FileCommand)} invoked", LogStatusLevel.Warning);
+                TabItem indexpageview = _mainWindow?.rootTab.Items.Cast<TabItem>().Where(x => x.Content.GetType().Name == "IndexPageView").FirstOrDefault();
+                if (indexpageview != null)
                 {
-                    _mainWindow.TaskQueues.Enqueue(() => _mainWindow.AddDiffDecompileToTreeView(item, true));
+                    IndexPageView view = indexpageview.Content as IndexPageView;
+                    foreach (var item in DiffClientUtility.OpenDiffDecompileFiles())
+                    {
+                        _mainWindow.TaskQueues.Enqueue(() => _mainWindow.AddDiffDecompileToTreeView(item, true));
+                    }
                 }
+            }
+            else
+            {
+                // open workdir
+                Process.Start("explorer", $"{_mainWindow.mainWindowViewModel.DiffClientWorkDir.FullName}");
             }
         }
     }

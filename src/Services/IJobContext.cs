@@ -12,5 +12,7 @@ namespace DiffClient.Services
         MainWindow MainWindow { get; }
 
         TabControl TabControl { get; }
+
+        string Message { get; internal set; }
     }
 }

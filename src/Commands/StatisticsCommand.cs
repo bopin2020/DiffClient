@@ -10,6 +10,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using DiffClient.DataModel;
+using System.IO;
+using System.Diagnostics;
 
 namespace DiffClient.Commands
 {
@@ -17,6 +19,10 @@ namespace DiffClient.Commands
     {
         [Description("Diff View")]
         DiffView,
+        [Description("Diff Tab")]
+        DiffTab,
+        [Description("Diff With VS Code")]
+        DiffVSCode,
         [Description("Tag")]
         Tag,
     }
@@ -78,6 +84,35 @@ namespace DiffClient.Commands
                                  Primary = currow.PrimaryData,
                                  Secondary = currow.SecondaryData
                              }));
+                    break;
+                case StatisticsCommandRouteEvent.DiffTab:
+                    _mainWindow.rootTab?.Items.Add(new DiffDecompileTabItem(_mainWindow, new DiffDecompileArgs()
+                    {
+                        Title = $"{currow.PrimaryName}-{currow.SecondaryName}",
+                        Primary = currow.PrimaryData,
+                        Secondary = currow.SecondaryData
+                    }));
+                    break;
+                case StatisticsCommandRouteEvent.DiffVSCode:
+                    string oldname = Path.Combine(_mainWindow.mainWindowViewModel.DiffClientWorkDir.FullName, currow.PrimaryName + "-old.c");
+                    string newname = Path.Combine(_mainWindow.mainWindowViewModel.DiffClientWorkDir.FullName, currow.SecondaryName + "-new.c");
+                    try
+                    {
+                        File.WriteAllText(oldname, currow.PrimaryData);
+                        File.WriteAllText(newname, currow.SecondaryData);
+                        ProcessStartInfo psi = new ProcessStartInfo();
+                        psi.FileName = "cmd";
+                        psi.Arguments = $"/c code -d {oldname} {newname}";
+                        MainWindow.SetStatusException($"Start process command arguments: {psi.Arguments}", LogStatusLevel.Info);
+                        Process.Start(psi);
+                    }
+                    catch (Exception ex)
+                    {
+                        MainWindow.SetStatusException(ex.Message,LogStatusLevel.Error);
+                        MainWindow.SetStatusException(ex.StackTrace,LogStatusLevel.Error);
+                        File.Delete(oldname);
+                        File.Delete(newname);
+                    }
                     break;
                 default:
                     break;

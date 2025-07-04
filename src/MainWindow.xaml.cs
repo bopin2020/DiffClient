@@ -69,6 +69,7 @@ namespace DiffClient
             SetStatusException($"{nameof(MainWindow)}.{nameof(menu0_Initialized)}", LogStatusLevel.Info);
             MenuItem file = new MenuItem() { Header = "File" };
             file.Items.Add(new MenuItem() { Header = "Open", Command = new FileCommand(this) });
+            file.Items.Add(new MenuItem() { Header = "Open Workdir", Command = new FileCommand(this),CommandParameter = true });
             OpenHistoryMenuItem = new MenuItem() { Header = "OpenHistory" };
             file.Items.Add(OpenHistoryMenuItem);
             file.Items.Add(new MenuItem() { Header = "Clear All TabItem", Command = new DispatchCommand(this), CommandParameter = DispatchEvent.CleanTablItems });
@@ -241,6 +242,7 @@ namespace DiffClient
                 _mainWindowViewModel.GlobalLogStream.Flush();
             }
 
+            _mainWindowViewModel.xxxBuilderService.JobContext.Message = msg;
             _mainWindowViewModel.xxxBuilderService.ProcessReporter.ReportProgress(_mainWindowViewModel.xxxBuilderService.JobContext);
         }
 
