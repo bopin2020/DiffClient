@@ -33,13 +33,18 @@ namespace DiffClient.Commands
 
         public void Execute(object? parameter)
         {
+            if (parameter == null)
+            {
+                throw new ArgumentNullException(nameof(parameter));
+            }
+
             MainWindow.SetStatusException($"{nameof(HighlightTreeViewItemCommand)} invoked", LogStatusLevel.Warning);
             DiffTreeItem tmp = QueryObject.GetIndexTreeViewItemCurrent(_mainWindow);
             CopyTreeViewItemRouteEvent ev = (CopyTreeViewItemRouteEvent)parameter;
             switch (ev)
             {
                 case CopyTreeViewItemRouteEvent.Copy:
-                    string result = tmp.Header.ToString();
+                    string? result = tmp.Header.ToString();
                     MessageBox.Show(result);
                     Clipboard.SetDataObject(result);
                     break;

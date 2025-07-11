@@ -10,7 +10,7 @@ namespace DiffClient.UserControls
     {
         private DiffBasicInfoView _view;
 
-        public string Header { get; set; }
+        public string? Header { get; set; }
 
         public DiffBasicInfoViewModel(DiffBasicInfoView diffBasicInfoView)
         {

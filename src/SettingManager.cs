@@ -176,7 +176,8 @@ namespace DiffClient
 
         public SettingManager(MainWindowViewModel mainWindowViewModel)
         {
-            _mainWindowViewModel = mainWindowViewModel;
+            if(mainWindowViewModel != null)
+                _mainWindowViewModel = mainWindowViewModel;
         }
     }
 }

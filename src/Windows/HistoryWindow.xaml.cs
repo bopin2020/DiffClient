@@ -20,7 +20,7 @@ namespace DiffClient.Windows
     /// </summary>
     public partial class HistoryWindow : Window
     {
-        private SettingManager SettingManager;
+        private SettingManager? SettingManager;
         public HistoryWindow()
         {
             InitializeComponent();
@@ -45,7 +45,9 @@ namespace DiffClient.Windows
         {
             if (SettingManager == null)
             {
+#pragma warning disable CS8625 // 无法将 null 字面量转换为非 null 的引用类型。
                 SettingManager = new SettingManager(null);
+#pragma warning restore CS8625 // 无法将 null 字面量转换为非 null 的引用类型。
                 SettingManager.InitOrRegisterSetting();
             }
             historyFrame.NavigationService.Navigate(new HistoryFilterPage(this,SettingManager.GetHistories().Select(x => new HistoryEntry() { FullName = x })));

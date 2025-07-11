@@ -38,6 +38,39 @@ namespace DiffClient.Commands
             _mainWindow = mainWindow;
         }
 
+        /// <summary>
+        /// xxx
+        /// xxx(int* p,xxx)
+        /// xxx::xxx::xxx
+        /// </summary>
+        /// <param name="fullname"></param>
+        /// <returns></returns>
+        public static string FilterFuncName(string fullname)
+        {
+            if (String.IsNullOrEmpty(fullname))
+            {
+                throw new ArgumentNullException(fullname);
+            }
+
+            if(!fullname.Contains("*") && !fullname.Contains("::"))
+            {
+                return fullname;
+            }
+            string pure_methodname = "";
+            int index = fullname.IndexOf('(');
+            if(index > 0)
+            {
+                pure_methodname = fullname.Substring(0, index);
+            }
+
+            if (pure_methodname.Contains("::"))
+            {
+                pure_methodname = pure_methodname.Replace("::", "__");
+            }
+
+            return pure_methodname;
+        }
+
         public bool CanExecute(object? parameter)
         {
             return true;
@@ -46,7 +79,7 @@ namespace DiffClient.Commands
         public void Execute(object? parameter)
         {
             var ctx = parameter as ContextMenuContext;
-            if (ctx == null || ctx.DataGrid == null)
+            if (ctx == null || ctx?.DataGrid == null)
             {
                 return;
             }
@@ -69,7 +102,7 @@ namespace DiffClient.Commands
                     var selectedItem = ctx.DataGrid.SelectedItem;
                     if (selectedItem != null)
                     {
-                        DataGridRow row = ctx.DataGrid?.ItemContainerGenerator.ContainerFromItem(selectedItem) as DataGridRow;
+                        DataGridRow? row = ctx.DataGrid?.ItemContainerGenerator.ContainerFromItem(selectedItem) as DataGridRow;
                         if (row != null)
                         {
                             row.Background = Brushes.AliceBlue;
@@ -94,8 +127,8 @@ namespace DiffClient.Commands
                     }));
                     break;
                 case StatisticsCommandRouteEvent.DiffVSCode:
-                    string oldname = Path.Combine(_mainWindow.mainWindowViewModel.DiffClientWorkDir.FullName, currow.PrimaryName + "-old.c");
-                    string newname = Path.Combine(_mainWindow.mainWindowViewModel.DiffClientWorkDir.FullName, currow.SecondaryName + "-new.c");
+                    string oldname = Path.Combine(_mainWindow.mainWindowViewModel.DiffClientWorkDir.FullName, FilterFuncName(currow.PrimaryName) + "-old.c");
+                    string newname = Path.Combine(_mainWindow.mainWindowViewModel.DiffClientWorkDir.FullName, FilterFuncName(currow.SecondaryName) + "-new.c");
                     try
                     {
                         File.WriteAllText(oldname, currow.PrimaryData);
@@ -109,7 +142,8 @@ namespace DiffClient.Commands
                     catch (Exception ex)
                     {
                         MainWindow.SetStatusException(ex.Message,LogStatusLevel.Error);
-                        MainWindow.SetStatusException(ex.StackTrace,LogStatusLevel.Error);
+                        if(!String.IsNullOrEmpty(ex.StackTrace))
+                            MainWindow.SetStatusException(ex.StackTrace,LogStatusLevel.Error);
                         File.Delete(oldname);
                         File.Delete(newname);
                     }

@@ -250,7 +250,7 @@ namespace DiffClient.Pages
             if (UseStartRule)
             {
                 string realfilterstr = Token.Substring(_starts.Length);
-                Func<HistoryEntry, bool> call = (entry) => { return (bool)entry.Value?.StartsWith(realfilterstr); };
+                Func<HistoryEntry, bool> call = (entry) => { return (bool)entry.Value.StartsWith(realfilterstr); };
                 if (!String.IsNullOrEmpty(realfilterstr))
                 {
                     tokenizerResult.IsError = false;
