@@ -3,6 +3,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Windows;
 using DiffClient.Windows;
+using DiffDecompile.Core;
 
 namespace DiffClient
 {
@@ -34,6 +35,18 @@ namespace DiffClient
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            var args = Environment.GetCommandLineArgs();
+            if (args.Length > 1 && args[1] == "-noui")
+            {
+                var diffd = new DiffDecompileManager();
+                var results = diffd.ParseFromFile(args[2]);
+                foreach (var result in results)
+                {
+                    Console.WriteLine($"{result.Id} {result.PrimaryName} {result.SecondaryName}");
+                }
+                Environment.Exit(0);
+            }
+
             if (Environment.GetCommandLineArgs().Length == 2)
             {
                 var view = new MainWindow();
