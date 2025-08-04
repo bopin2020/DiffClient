@@ -79,13 +79,20 @@ namespace DiffClient.UserControls
             {
                 var hl = new Hyperlink();
                 hl.Inlines.Add(item.Header);
-                Operation.Children.Add(new Button()
+                var btn = new Button()
                 {
                     Content = hl,
                     Margin = _thickness,
                     HorizontalAlignment = HorizontalAlignment.Center
-                });
+                };
+                btn.Click += Btn_Click;
+                Operation.Children.Add(btn);
             }
+        }
+
+        private void Btn_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("not support");
         }
     }
 }

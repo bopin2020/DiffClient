@@ -28,7 +28,7 @@ namespace DiffClient.Windows
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void Previous_Click(object sender, RoutedEventArgs e)

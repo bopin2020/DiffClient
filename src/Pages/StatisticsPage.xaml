@@ -27,12 +27,13 @@
         </Grid>
         <TextBox Grid.Row="1" x:Name="filter_statistics" Text="*" PreviewKeyDown="filter_statistics_KeyDown" TextChanged="filter_statistics_TextChanged"/>
         <ListBox x:Name="filterAutoComplete" Grid.Row="2" Visibility="Collapsed" MaxHeight="100" SelectedItem="{Binding FilterCurrent}" SelectionMode="Single" SelectionChanged="filterAutoComplete_SelectionChanged" ItemsSource="{Binding AutoCompleteDataSource,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-        <DataGrid Grid.Row="3" Name="statisticsDataGrid"  IsReadOnly="True" LoadingRow="statisticsDataGrid_LoadingRow" MouseDoubleClick="statisticsDataGrid_MouseDoubleClick" AutoGenerateColumns="False" ItemsSource="{Binding ObservableItems,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+        <DataGrid Grid.Row="3" EnableRowVirtualization="False" EnableColumnVirtualization="False"  Name="statisticsDataGrid"  IsReadOnly="True" LoadingRow="statisticsDataGrid_LoadingRow" MouseDoubleClick="statisticsDataGrid_MouseDoubleClick" AutoGenerateColumns="False" ItemsSource="{Binding ObservableItems,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Binding="{Binding Id}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Similarity" Binding="{Binding Similarity}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Confidence" Binding="{Binding Confidence}"></DataGridTextColumn>
-                <DataGridTextColumn Header="PrimaryName" Binding="{Binding PrimaryName}"></DataGridTextColumn>
+                <DataGridTextColumn Header="PrimaryName" Binding="{Binding PrimaryName}">
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="PrimaryAddress" Binding="{Binding PrimaryAddress,StringFormat={}{0:X8}}"></DataGridTextColumn>
                 <DataGridTextColumn Header="SecondaryName" Binding="{Binding SecondaryName}"></DataGridTextColumn>
                 <DataGridTextColumn Header="SecondaryAddress" Binding="{Binding SecondaryAddress,StringFormat={}{0:X8}}"></DataGridTextColumn>

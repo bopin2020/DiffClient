@@ -25,6 +25,8 @@ namespace DiffClient.Commands
         DiffVSCode,
         [Description("Tag")]
         Tag,
+        [Description("Highlight Functions(Contain Patch Features)")]
+        HighlightFunctions,
     }
 
     internal class StatisticsCommand : ICommand
@@ -98,6 +100,17 @@ namespace DiffClient.Commands
 
             switch (re)
             {
+                case StatisticsCommandRouteEvent.HighlightFunctions:
+                    for (int i = 0; i < ctx?.DataGrid?.Items.Count; i++)
+                    {
+                        DataGridRow? row = ctx.DataGrid?.ItemContainerGenerator.ContainerFromIndex(i) as DataGridRow;
+                        if (row != null)
+                        {
+                            row.Background = Brushes.LightSeaGreen;
+                        }
+                    }
+                    break;
+
                 case StatisticsCommandRouteEvent.Tag:
                     var selectedItem = ctx.DataGrid.SelectedItem;
                     if (selectedItem != null)
@@ -135,6 +148,7 @@ namespace DiffClient.Commands
                         File.WriteAllText(newname, currow.SecondaryData);
                         ProcessStartInfo psi = new ProcessStartInfo();
                         psi.FileName = "cmd";
+                        // use cmd /c because  Code  Sandbox
                         psi.Arguments = $"/c code -d {oldname} {newname}";
                         MainWindow.SetStatusException($"Start process command arguments: {psi.Arguments}", LogStatusLevel.Info);
                         Process.Start(psi);
@@ -152,7 +166,7 @@ namespace DiffClient.Commands
                     break;
             }
 
-            ctx.DataGrid.Items.Refresh();
+            ctx?.DataGrid?.Items.Refresh();
         }
     }
 

@@ -189,23 +189,24 @@ namespace DiffClient.Pages
                     new BasicInfoLinkMetadata()
                     {
                         Header = "File Download",
-                        MsdlLink = ""
+                        MsdlLink = "https://yuque.com/bopin"
                     },
                     new BasicInfoLinkMetadata()
                     {
                         Header = "Patch Download",
-                        MsdlLink = ""
+                        MsdlLink = "https://yuque.com/bopin"
                     },
                     new BasicInfoLinkMetadata()
                     {
                         Header = "PDB Download",
-                        MsdlLink = ""
+                        MsdlLink = "https://yuque.com/bopin"
                     },
                     new BasicInfoLinkMetadata()
                     {
                         Header = "Associated CVE",
                         IsAssociatedCVE = true,
-                        CVEs = new string[] { }
+                        CVEs = new string[] { },
+                        MsdlLink = "https://yuque.com/bopin"
                     },
                 }
             }));
