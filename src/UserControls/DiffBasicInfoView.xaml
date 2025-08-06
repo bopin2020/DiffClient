@@ -25,9 +25,12 @@
                 </StackPanel>
                 <StackPanel x:Name="Arch" Grid.Row="1"  Orientation="Horizontal">
                     <Label Content="Arch:"/>
+                    <ComboBox x:Name="arch_combobox" MinWidth="100" ItemsSource="{Binding ArchSources}"/>
                 </StackPanel>
                 <StackPanel x:Name="FileSize" Grid.Row="2" Orientation="Horizontal">
                     <Label Content="File Size:"/>
+                    <TextBlock Text="{Binding Size}"/>
+                    <ComboBox x:Name="FileSizeType" ItemsSource="{Binding FileSizeType}"/>
                 </StackPanel>
                 <StackPanel x:Name="SHA256" Grid.Row="3"  Orientation="Horizontal">
                     <Label Content="SHA 256:"/>

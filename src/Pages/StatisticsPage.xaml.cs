@@ -131,16 +131,18 @@ namespace DiffClient.Pages
         private void statisticsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var dataGrid = sender as DataGrid;
-            if (dataGrid.SelectedItem == null) return;
+            if (dataGrid?.SelectedItem == null) return;
 
             var currow = dataGrid.SelectedItem as DiffDecompileItem;
+#pragma warning disable CS8601 // 引用类型赋值可能为 null。
             _indexFrame.NavigationService.Navigate(
                  new DiffDecompilePreviewPage(_mainWindow, new DiffDecompileArgs()
                  {
-                     Title = $"{currow.PrimaryName}-{currow.SecondaryName}",
-                     Primary = currow.PrimaryData,
-                     Secondary = currow.SecondaryData
+                     Title = $"{currow?.PrimaryName}-{currow?.SecondaryName}",
+                     Primary = currow?.PrimaryData,
+                     Secondary = currow?.SecondaryData
                  }));
+#pragma warning restore CS8601 // 引用类型赋值可能为 null。
         }
 
         private void initBasicInfo()

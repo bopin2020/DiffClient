@@ -12,6 +12,25 @@ namespace DiffClient.UserControls
 
         public string? Header { get; set; }
 
+        public string[] ArchSources { get; set; } = new string[]
+        {
+            "x86",
+            "x86_64",
+            "ARM32",
+            "ARM64",
+            "Unknown"
+        };
+
+        public string[] FileSizeType { get; set; } = new string[]
+        {
+            "b",
+            "kb",
+            "mb",
+            "gb"
+        };
+
+        public ulong Size { get; set; }
+
         public DiffBasicInfoViewModel(DiffBasicInfoView diffBasicInfoView)
         {
             _view = diffBasicInfoView;

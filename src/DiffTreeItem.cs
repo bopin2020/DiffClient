@@ -80,5 +80,12 @@ namespace DiffClient
         LocalDirectory = 0x0020,
         LocalRoot = 0x0040,
         LocalTreeItem = 0x0080,
+        /// <summary>
+        /// Change
+        /// Delete
+        /// New
+        /// Custom Group Tags
+        /// </summary>
+        FunctionGroup = 0x0100,
     }
 }

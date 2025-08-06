@@ -75,6 +75,9 @@ namespace DiffClient.UserControls
             Subsystem.Children.Add(new TextBlock { Text = entry.Subsystem, Margin = _thickness, HorizontalAlignment = HorizontalAlignment.Center });
             SystemPath.Children.Add(new TextBlock { Text = entry.SystemPath, Margin = _thickness, HorizontalAlignment = HorizontalAlignment.Center });
 
+            arch_combobox.SelectedIndex = 0;
+            FileSizeType.SelectedIndex = 1;
+
             foreach (var item in entry.Operation)
             {
                 var hl = new Hyperlink();

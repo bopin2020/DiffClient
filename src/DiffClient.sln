@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiffClient", "DiffClient.csproj", "{B4FC6421-7652-45D6-9C0E-9F7060F391D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiffDecompile.Core", "..\DiffDecompile.Core\DiffDecompile.Core.csproj", "{799ADD22-54B8-4A8B-A550-2C6A7D559ECA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -14,6 +16,10 @@ Global
 		{B4FC6421-7652-45D6-9C0E-9F7060F391D6}.Debug|x64.ActiveCfg = Debug|x64
 		{B4FC6421-7652-45D6-9C0E-9F7060F391D6}.Debug|x64.Build.0 = Debug|x64
 		{B4FC6421-7652-45D6-9C0E-9F7060F391D6}.Release|x64.ActiveCfg = Release|x64
+		{799ADD22-54B8-4A8B-A550-2C6A7D559ECA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{799ADD22-54B8-4A8B-A550-2C6A7D559ECA}.Debug|x64.Build.0 = Debug|Any CPU
+		{799ADD22-54B8-4A8B-A550-2C6A7D559ECA}.Release|x64.ActiveCfg = Release|Any CPU
+		{799ADD22-54B8-4A8B-A550-2C6A7D559ECA}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

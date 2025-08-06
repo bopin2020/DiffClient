@@ -59,9 +59,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="DiffDecompile.Core">
-      <HintPath>thrid\DiffDecompile.Core.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="D:\code\diffFind\src\engine\Providers\DiffDecompile.Core\DiffDecompile.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="DiffEngine">
       <HintPath>thrid\DiffEngine.dll</HintPath>
     </Reference>

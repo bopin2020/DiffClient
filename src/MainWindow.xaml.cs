@@ -324,22 +324,109 @@ namespace DiffClient
                     if(father.Parent == null)
                         QueryObject.GetIndexPageViewContent(this).ViewModel.TreeItemsSource.Add(father);
                     // todo  lazy load  diff functions
+
+                    // step1. add change entries
+                    var change_father = new DiffTreeItem()
+                    {
+                        Header = $"Change Functions  {results.Where(x => x.Flag == 0).Count()}",
+                        Foreground = Brushes.Gray,
+                        DiffDecompileEntry = null,
+                        Type = TreeItemType.FunctionGroup,
+                        Cloud = new CloudModel
+                        {
+                            Initialized = true,
+                            IsCloud = false
+                        },
+                    };
+                    // step2. add delete entries
+
+                    var delete_father = new DiffTreeItem()
+                    {
+                        Header = $"Delete Functions  {results.Where(x => x.Flag == 1).Count()}",
+                        Foreground = Brushes.Gray,
+                        DiffDecompileEntry = null,
+                        Type = TreeItemType.FunctionGroup,
+                        Cloud = new CloudModel
+                        {
+                            Initialized = true,
+                            IsCloud = false
+                        },
+                    };
+                    // step3. add new entries
+                    var new_father = new DiffTreeItem()
+                    {
+                        Header = $"New Functions  {results.Where(x => x.Flag == 2).Count()}",
+                        Foreground = Brushes.Gray,
+                        DiffDecompileEntry = null,
+                        Type = TreeItemType.FunctionGroup,
+                        Cloud = new CloudModel
+                        {
+                            Initialized = true,
+                            IsCloud = false
+                        },
+                    };
+
                     foreach (var entry in results)
                     {
-                        father.AddProxy(new DiffTreeItem()
+                        switch (entry.Flag)
                         {
-                            Header = $"{entry.PrimaryName}-{entry.SecondaryName}",
-                            Foreground = Brushes.Gray,
-                            DiffDecompileEntry = entry,
-                            Type = TreeItemType.Function,
-                            Cloud = new CloudModel
-                            {
-                                Initialized = true,
-                                IsCloud = false
-                            },
-                            ToolTip = new TreeToolTipBuilder("", $"Similarity: {entry.Similarity}\t Confidence: {entry.Confidence}", ToolTipTarget.Function).ToString()
-                        });
+                            case 0:
+                                {
+                                    change_father.AddProxy(new DiffTreeItem()
+                                    {
+                                        Header = $"{entry.PrimaryName}-{entry.SecondaryName}",
+                                        Foreground = Brushes.Gray,
+                                        DiffDecompileEntry = entry,
+                                        Type = TreeItemType.Function,
+                                        Cloud = new CloudModel
+                                        {
+                                            Initialized = true,
+                                            IsCloud = false
+                                        },
+                                        ToolTip = new TreeToolTipBuilder("", $"Similarity: {entry.Similarity}\t Confidence: {entry.Confidence}", ToolTipTarget.Function).ToString()
+                                    });
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    delete_father.AddProxy(new DiffTreeItem()
+                                    {
+                                        Header = $"{entry.PrimaryName}",
+                                        Foreground = Brushes.Gray,
+                                        DiffDecompileEntry = entry,
+                                        Type = TreeItemType.Function,
+                                        Cloud = new CloudModel
+                                        {
+                                            Initialized = true,
+                                            IsCloud = false
+                                        },
+                                    });
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    new_father.AddProxy(new DiffTreeItem()
+                                    {
+                                        Header = $"{entry.SecondaryName}",
+                                        Foreground = Brushes.Gray,
+                                        DiffDecompileEntry = entry,
+                                        Type = TreeItemType.Function,
+                                        Cloud = new CloudModel
+                                        {
+                                            Initialized = true,
+                                            IsCloud = false
+                                        },
+                                    });
+                                    break;
+                                }
+                            default:
+                                break;
+                        }
                     }
+                    father.AddProxy(change_father);
+                    father.AddProxy(delete_father);
+                    father.AddProxy(new_father);
+
                     _mainWindow.mainWindowViewModel.TreeItemCaches.Add(father);
                 }
                 else
