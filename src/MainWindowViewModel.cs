@@ -70,11 +70,6 @@ namespace DiffClient
             DiffClientWorkDir = Directory.CreateDirectory(Guid.NewGuid().ToString().Replace("-", ""));
         }
 
-        private void unInit()
-        {
-            DiffClientWorkDir.Delete(true);
-        }
-
         #endregion
 
         #region Notify Property
@@ -144,6 +139,11 @@ namespace DiffClient
         public void SaveSetting()
         {
             SettingManager.SaveSetting();
+        }
+
+        public void unInit()
+        {
+            DiffClientWorkDir.Delete(true);
         }
 
         /// <summary>

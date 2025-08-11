@@ -8,6 +8,7 @@ using DiffDecompile.Core;
 using DiffEngine.Win32.Cache;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -286,6 +287,7 @@ namespace DiffClient
                     if (DiffDecompileCache.ContainsKey(item))
                     {
                         SetStatusException("has contain it", LogStatusLevel.Warning);
+                        FlashWindow.Flash();
                         return;
                     }
                     DiffDecompileCache.Add(item, 0);
@@ -442,7 +444,7 @@ namespace DiffClient
 
         public void Window_LocationChanged(object? sender, EventArgs e)
         {
-
+            Utility.FlashWindow.Flash();
         }
 
         #endregion

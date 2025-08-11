@@ -44,6 +44,7 @@ namespace DiffClient.Commands
         public bool ExitFromClick(bool click)
         {
             MainWindow.SetStatusException($"{nameof(ExitCommand)} invoked", LogStatusLevel.Warning);
+            _mainWindow.mainWindowViewModel.unInit();
             int flag = (int)_mainWindow.mainWindowViewModel.SettingManager.GetValue("ShowDialog");
             if (flag == 0)
             {

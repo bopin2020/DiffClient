@@ -20,3 +20,6 @@ install .NET6 Desktop
 
 
 
+srvnet.sys  26100.4768  add   `SmbQuicCertRevocationCheckFollowup`  Feature
+
+![image-20250806151457283](imgs/image-20250806151457283.png)
